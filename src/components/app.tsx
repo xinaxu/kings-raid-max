@@ -1,63 +1,55 @@
 ﻿import React from "react"
-import {Nav, INavLink} from "office-ui-fabric-react/lib/Nav";
 import ClassBuffConfiguration from "./class-buff-configuration";
 import ArtifactConfiguration from "./artifact-configuration";
 import HeroConfiguration from "./hero-configuration";
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import {initializeIcons} from 'office-ui-fabric-react/lib/Icons';
+import "office-ui-fabric-react/dist/css/fabric.min.css"
+import {connect} from "react-redux";
+import {RootState} from "../redux/types";
+import {ARTIFACT_CONFIGURATION, CLASS_BUFF, HERO_CONFIGURATION, NavigationState} from "../redux/navigation/types";
+import Navigation from "./navigation";
+
 initializeIcons();
 
-class App extends React.Component {
-    constructor(props: Readonly<never>) {
+export type AppProps = {
+    selectedNav: NavigationState
+};
+
+class App extends React.Component<AppProps> {
+    constructor(props: Readonly<AppProps>) {
         super(props);
-        this.onLinkClick = this.onLinkClick.bind(this);
     }
 
-    onLinkClick(ev?: React.MouseEvent<HTMLElement>, item?: INavLink) {
-        console.log(ev);
-        console.log(item);
-    }
-    
     render() {
         return (
-            <div>
-                <Nav
-                    styles={{
-                        root: {
-                            width: 200,
-                            overflowY: 'auto'
-                        }
-                    }}
-                    onLinkClick={this.onLinkClick}
-                    groups={[
-                        {
-                            links: [
-                                {
-                                    name: 'Class Buff',
-                                    url: '#class_buff',
-                                    links: [
-                                        {
-                                            name: 'Tank',
-                                            url: '#class_buff/tank',
-                                            key: 'class_buff/tank'
-                                        },
-                                        {
-                                            name: 'Priest',
-                                            url: '#class_buff/priest',
-                                            key: 'class_buff/priest'
-                                        },
-                                    ],
-                                    isExpanded: true
-                                },
-                            ]
-                        }
-                    ]}
-                />
-                <ClassBuffConfiguration/>
-                <ArtifactConfiguration/>
-                <HeroConfiguration/>
+            <div className="ms-Grid" dir="ltr">
+                <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-xl2">
+                        <Navigation />
+                    </div>
+                    <div className="ms-Grid-col ms-xl10">
+                        <div>
+                            <div style={{display: this.props.selectedNav.header === HERO_CONFIGURATION ? "inline" : "none"}}>
+                                <HeroConfiguration/>
+                            </div>
+                            <div style={{display: this.props.selectedNav.header === CLASS_BUFF ? "inline" : "none"}}>
+                                <ClassBuffConfiguration/>
+                            </div>
+                            <div style={{display: this.props.selectedNav.header === ARTIFACT_CONFIGURATION ? "inline" : "none"}}>
+                                <ArtifactConfiguration/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
-export default App
+const mapStateToProps = (state: RootState): AppProps => {
+    return {
+        selectedNav: state.selectedNav
+    };
+};
+
+export default connect(mapStateToProps)(App);
