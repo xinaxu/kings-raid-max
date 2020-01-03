@@ -1,9 +1,9 @@
-﻿import React from "react"
+﻿import React from "react";
 
 class ArtifactConfiguration extends React.Component {
-    render() {
-        return <h1>Artifact</h1>
-    }
+  render() {
+    return <h1>Artifact</h1>;
+  }
 }
 
-export default ArtifactConfiguration
+export default ArtifactConfiguration;

@@ -1,3 +1,3 @@
-﻿import {allReducers} from "./reducers";
+﻿import { allReducers } from "./reducers";
 
 export type RootState = ReturnType<typeof allReducers>;
