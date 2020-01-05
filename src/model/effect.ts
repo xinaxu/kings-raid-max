@@ -10,11 +10,11 @@ export enum EffectType {
 }
 
 export enum EffectDestination {
-  Self,
-  Allies,
-  TopDps,
-  SingleEnemy,
-  Enemies
+  Self = "self",
+  Allies = "allies",
+  TopDps = "top dps",
+  SingleEnemy = "single enemry",
+  Enemies = "all enemies"
 }
 
 export enum EffectTrigger {
@@ -36,7 +36,7 @@ export enum EffectMultiplierType {
 
 export type EffectMultiplier = {
   type: EffectMultiplierType;
-  maxStack: number;
+  maxStack: number | undefined;
 };
 
 export class Effect {
@@ -51,10 +51,107 @@ export class Effect {
   duration?: number;
   starting?: number;
   ending?: number;
-  private _dispellable?: boolean;
+  allyStackEfficiency?: number;
+  _dispellable?: boolean;
 
   constructor(type: EffectType) {
     this.type = type;
+  }
+
+  description(): string {
+    let descriptions: string[] = [];
+
+    if (this.starting !== undefined) {
+      descriptions.push(`After ${this.starting} seconds, `);
+    }
+
+    if (this.ending !== undefined) {
+      descriptions.push(`For ${this.ending} seconds, `);
+    }
+
+    if (this.trigger !== undefined) {
+      descriptions.push(`${this.trigger}, `);
+    }
+
+    switch (this.type) {
+      case EffectType.StatusChangeAbsolute:
+      case EffectType.StatusChange:
+        descriptions.push(
+          `${this.value! > 0 ? "increase" : "reduce"} ${this.destination} ${
+            this.status
+          } by ${this.value! > 0 ? this.value! : -this.value!} ${
+            this.type === EffectType.StatusChange ? " percentage" : ""
+          }` +
+            (this.fromStatus !==
+            undefined
+            ? ` of ${this.fromStatus}`
+            : "")
+        );
+
+        break;
+      case EffectType.Cc:
+        descriptions.push(`stun ${this.destination}`);
+        break;
+
+      case EffectType.CcImmunity:
+        descriptions.push(`${this.destination} gains CC immunity`);
+        break;
+
+      case EffectType.CooldownReduction:
+        descriptions.push(
+          `reduce ${this.destination} cooldown by ${this.value!} seconds`
+        );
+        break;
+
+      case EffectType.Dispel:
+        switch (this.destination) {
+          case EffectDestination.Self:
+          case EffectDestination.Allies:
+          case EffectDestination.TopDps:
+            descriptions.push(
+              `dispel all negative effects from ${this.destination}`
+            );
+            break;
+          default:
+            descriptions.push(
+              `dispel all possitive effects from ${this.destination}`
+            );
+            break;
+        }
+        break;
+    }
+
+    if (this.duration !== undefined) {
+      descriptions.push(` for ${this.duration} seconds`);
+    }
+
+    if (this.multiplier !== undefined) {
+      descriptions.push(` ${this.multiplier.type}`);
+      if (this.multiplier.maxStack !== undefined) {
+        descriptions.push(
+          `, same effects stacks for ${this.multiplier.maxStack} times`
+        );
+      }
+    }
+
+    if (this.allyStackEfficiency !== undefined) {
+      descriptions.push(
+        `, same effect from allies stack only ${this.allyStackEfficiency}`
+      );
+    }
+
+    if (!this.dispellable()) {
+      descriptions.push(`, this effect cannot be dispelled`);
+    }
+
+    descriptions.push(". ");
+
+    if (this.coolDown) {
+      descriptions.push(`[CoolDown: ${this.coolDown}]`);
+    }
+
+    let description: string = descriptions.join("");
+    return description[0].toUpperCase() + description.slice(1);
   }
 
   dispellable(): boolean {
@@ -84,61 +181,6 @@ export class Effect {
     return false;
   }
 
-  withDestination(destination: EffectDestination): this {
-    this.destination = destination;
-    return this;
-  }
-
-  withValue(value: number): this {
-    this.value = value;
-    return this;
-  }
-
-  withCoolDown(coolDown: number): this {
-    this.coolDown = coolDown;
-    return this;
-  }
-
-  withDuration(duration: number): this {
-    this.duration = duration;
-    return this;
-  }
-
-  withStarting(starting: number): this {
-    this.starting = starting;
-    return this;
-  }
-
-  withEnding(ending: number): this {
-    this.ending = ending;
-    return this;
-  }
-
-  withMultiplier(multiplier: EffectMultiplier): this {
-    this.multiplier = multiplier;
-    return this;
-  }
-
-  withStatus(status: Status): this {
-    this.status = status;
-    return this;
-  }
-
-  withFromStatus(fromStatus: Status): this {
-    this.fromStatus = fromStatus;
-    return this;
-  }
-
-  withCondition(trigger: EffectTrigger): this {
-    this.trigger = trigger;
-    return this;
-  }
-
-  withDispellable(dispellable: boolean): this {
-    this._dispellable = dispellable;
-    return this;
-  }
-
   with(override: {
     type?: EffectType;
     destination?: EffectDestination;
@@ -152,6 +194,7 @@ export class Effect {
     starting?: number;
     ending?: number;
     _dispellable?: boolean;
+    allyStackEfficiency?: number;
   }): this {
     if (override.type !== undefined) {
       this.type = override.type;
@@ -180,9 +223,6 @@ export class Effect {
     if (override.duration !== undefined) {
       this.duration = override.duration;
     }
-    if (override.duration !== undefined) {
-      this.duration = override.duration;
-    }
     if (override.starting !== undefined) {
       this.starting = override.starting;
     }
@@ -191,6 +231,9 @@ export class Effect {
     }
     if (override._dispellable !== undefined) {
       this._dispellable = override._dispellable;
+    }
+    if (override.allyStackEfficiency !== undefined) {
+      this.allyStackEfficiency = override.allyStackEfficiency;
     }
 
     return this;

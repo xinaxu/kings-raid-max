@@ -2,8 +2,10 @@
 
 import { combineReducers } from "redux";
 import { navigationReducer } from "./navigation/reducers";
+import { artifactConfigurationReducer } from "./artifact/reducers";
 
 export const allReducers = combineReducers({
   selectedNav: navigationReducer,
-  classBuffs: classBuffReducer
+  classBuffs: classBuffReducer,
+  artifactConfiguration: artifactConfigurationReducer
 });
