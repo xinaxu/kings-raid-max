@@ -13,7 +13,8 @@ const initialState: RootState =
           header: HERO_CONFIGURATION,
           heroClass: HeroClassType.Tank
         },
-        classBuffs: {}
+        classBuffs: {},
+        heroConfiguration: {}
       }
     : JSON.parse(initialSession);
 

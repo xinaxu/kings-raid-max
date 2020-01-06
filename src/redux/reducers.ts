@@ -3,9 +3,11 @@
 import { combineReducers } from "redux";
 import { navigationReducer } from "./navigation/reducers";
 import { artifactConfigurationReducer } from "./artifact/reducers";
+import { heroConfigurationReducer } from "./hero/reducers";
 
 export const allReducers = combineReducers({
   selectedNav: navigationReducer,
   classBuffs: classBuffReducer,
-  artifactConfiguration: artifactConfigurationReducer
+  artifactConfiguration: artifactConfigurationReducer,
+  heroConfiguration: heroConfigurationReducer
 });

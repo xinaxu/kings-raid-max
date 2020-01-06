@@ -2,16 +2,15 @@
 import {
   Stack,
   Text,
-  ITextStyles,
   Image,
   ChoiceGroup,
-  IChoiceGroupOption
+  IChoiceGroupOption,
 } from "office-ui-fabric-react";
 import { artifacts, ArtifactName } from "../model/artifact";
 import { RootState } from "../redux/types";
 import { changeArtifactConfiguration } from "../redux/artifact/actions";
 import { connect } from "react-redux";
-import { Card, ICardSectionStyles } from "@uifabric/react-cards";
+import { Card } from "@uifabric/react-cards";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -58,7 +57,7 @@ class ArtifactConfiguration extends React.Component<
             return (
               <Card key={artifactName} styles={{ root: { width: 200 } }}>
                 <Card.Item fill styles={{ root: { height: 50 } }}>
-                  <Text variant="xLarge">{artifactName}</Text>
+                  <Text variant="large">{artifactName}</Text>
                 </Card.Item>
                 <Card.Item fill>
                   <Image
@@ -66,15 +65,6 @@ class ArtifactConfiguration extends React.Component<
                     width={160}
                     height={160}
                   />
-                </Card.Item>
-                <Card.Item fill>
-                  <Text variant="small">
-                    {artifacts[artifactName] !== undefined ? artifacts[artifactName]!.description(this.props.artifactConfiguration[artifactName] !== undefined ? this.props.artifactConfiguration[artifactName]! : null).map(desc => {return (
-                      <p>
-                        {desc}
-                      </p>
-                    );}) : ""}
-                  </Text>
                 </Card.Item>
                 <Card.Item fill>
                   <ChoiceGroup
@@ -118,6 +108,23 @@ class ArtifactConfiguration extends React.Component<
                       }
                     ]}
                   />
+                </Card.Item>
+                <Card.Item
+                  fill
+                  styles={{ root: { height: 200, overflowY: "auto" } }}
+                >
+                  <Text variant="small">
+                    {artifacts[artifactName] !== undefined
+                      ? artifacts[artifactName]!.description(
+                          this.props.artifactConfiguration[artifactName] !==
+                            undefined
+                            ? this.props.artifactConfiguration[artifactName]!
+                            : null
+                        ).map((desc, index) => {
+                          return <p key={index}>{desc}</p>;
+                        })
+                      : ""}
+                  </Text>
                 </Card.Item>
               </Card>
             );

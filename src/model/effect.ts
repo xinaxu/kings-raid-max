@@ -6,6 +6,7 @@ export enum EffectType {
   CcImmunity,
   Cc,
   CooldownReduction,
+  SingleSkillCooldownReduction,
   Dispel
 }
 
@@ -81,11 +82,7 @@ export class Effect {
             this.status
           } by ${this.value! > 0 ? this.value! : -this.value!} ${
             this.type === EffectType.StatusChange ? " percentage" : ""
-          }` +
-            (this.fromStatus !==
-            undefined
-            ? ` of ${this.fromStatus}`
-            : "")
+          }` + (this.fromStatus !== undefined ? ` of ${this.fromStatus}` : "")
         );
 
         break;
@@ -100,6 +97,12 @@ export class Effect {
       case EffectType.CooldownReduction:
         descriptions.push(
           `reduce ${this.destination} cooldown by ${this.value!} seconds`
+        );
+        break;
+
+      case EffectType.SingleSkillCooldownReduction:
+        descriptions.push(
+          `reduce ${this.destination} specific skill cooldown by ${this.value!} seconds`
         );
         break;
 
