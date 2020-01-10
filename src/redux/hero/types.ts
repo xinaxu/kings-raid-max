@@ -135,7 +135,6 @@ export type HeroEnchantsAction = {
     id: 1 | 2 | 3 | 4;
     status: Status;
     name: HeroName
-    value: number;
   };
 };
 

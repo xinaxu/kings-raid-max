@@ -224,7 +224,6 @@ export function changeHeroEnchants(
       name: name,
       id: id,
       status: status,
-      value: value
     }
   };
 }
