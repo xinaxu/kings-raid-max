@@ -35,7 +35,7 @@ import {Status} from "../model/status";
 const mapStateToProps = (state: RootState) => {
     return {
         selectedHeroClass: state.selectedNav.heroClass,
-        heroConfiguration: state.heroConfiguration
+        heroConfiguration: state.heroConfiguration.heroConfiguration
     };
 };
 

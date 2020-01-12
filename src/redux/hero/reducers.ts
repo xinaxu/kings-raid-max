@@ -1,28 +1,109 @@
 import {Status} from "../../model/status";
+import {Accessory, GearSet, HeroName, SkillTranscendence} from "../../model/hero";
 import {
-    SkillTranscendence,
-    Accessory,
-    GearSet,
-    HeroName
-} from "../../model/hero";
-import {
-    CHANGE_HERO_OWNERSHIP,
-    CHANGE_HERO_TRANSCENDENCE,
-    CHANGE_HERO_SKILL,
-    CHANGE_HERO_UW_LEVEL,
-    CHANGE_HERO_UT_LEVEL,
-    CHANGE_HERO_GEARLINE,
-    CHANGE_HERO_UT_GEARLINE,
-    CHANGE_HERO_SW_LEVEL,
+    AllCalculationActions,
+    AllHeroActions,
+    BattleType,
+    CalculationState,
+    CHANGE_BATTLE_TYPE,
     CHANGE_HERO_ACCESSORY,
-    CHANGE_HERO_UW_RUNES,
     CHANGE_HERO_ARMOR_RUNES,
     CHANGE_HERO_ENCHANTS,
+    CHANGE_HERO_GEARLINE,
     CHANGE_HERO_GEARSET,
+    CHANGE_HERO_OWNERSHIP,
+    CHANGE_HERO_SELECTION,
+    CHANGE_HERO_SKILL,
+    CHANGE_HERO_SW_LEVEL,
+    CHANGE_HERO_TRANSCENDENCE,
+    CHANGE_HERO_UT_GEARLINE,
+    CHANGE_HERO_UT_LEVEL,
+    CHANGE_HERO_UT_PRIMARY,
+    CHANGE_HERO_UW_LEVEL,
+    CHANGE_HERO_UW_RUNES,
     HeroConfigurationState,
-    AllHeroActions,
-    CHANGE_HERO_UT_PRIMARY
+    HeroSelection
 } from "./types";
+
+export function calculationReducer(
+    state: {
+        heroConfiguration: HeroConfigurationState
+        calculation: CalculationState
+    } = {
+        heroConfiguration: {},
+        calculation: {
+            battleType: BattleType.WorldBoss,
+            heroes: [{heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }]
+        }
+    },
+    action: AllCalculationActions
+): {
+    heroConfiguration: HeroConfigurationState
+    calculation: CalculationState
+} {
+    switch (action.type) {
+        case CHANGE_BATTLE_TYPE:
+            return {
+                heroConfiguration: state.heroConfiguration,
+                calculation: {...state.calculation, battleType: action.payload}
+            };
+        case CHANGE_HERO_SELECTION:
+            let newheroes: [HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection] = [state.calculation.heroes[0], state.calculation.heroes[1], state.calculation.heroes[2], state.calculation.heroes[3], state.calculation.heroes[4], state.calculation.heroes[5], state.calculation.heroes[6], state.calculation.heroes[7]];
+            if (action.payload.heroName === null) {
+                newheroes[action.payload.index]!.heroName = action.payload.heroName;
+                return {
+                    heroConfiguration: state.heroConfiguration,
+                    calculation: {battleType: state.calculation.battleType, heroes: newheroes}
+                };
+            }
+
+            for (let i = 0; i < 8; ++i) {
+                if (newheroes[i]?.heroName === action.payload.heroName) {
+                    newheroes[i].heroName = null;
+                }
+            }
+            newheroes[action.payload.index] = {
+                heroName: action.payload.heroName,
+                isDps: action.payload.isDps,
+                isTank: action.payload.isTank,
+                dps: 0.0,
+                tankiness: 0.0
+            };
+            return {
+                heroConfiguration: state.heroConfiguration,
+                calculation: {battleType: state.calculation.battleType, heroes: newheroes}
+            };
+
+        default:
+            return state;
+    }
+
+    return state;
+}
 
 function copyHeroConfigurationState(
     state: HeroConfigurationState,
@@ -76,7 +157,7 @@ function copyHeroConfigurationState(
     return newState;
 }
 
-export function heroConfigurationReducer(
+function heroConfigurationReducer(
     state: HeroConfigurationState = {},
     action: AllHeroActions
 ): HeroConfigurationState {
@@ -164,4 +245,53 @@ export function heroConfigurationReducer(
     }
 
     return newState;
+}
+
+export type HeroCombinedState = {
+    heroConfiguration: HeroConfigurationState
+    calculation: CalculationState
+}
+
+export function heroCombinedReducer(
+    state: HeroCombinedState = {
+        heroConfiguration: {},
+        calculation: {
+            battleType: BattleType.WorldBoss,
+            heroes: [{heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+                heroName: null,
+                dps: 0.0,
+                tankiness: 0.0,
+                isDps: false,
+                isTank: false
+            }]
+        }
+    },
+    action: AllHeroActions | AllCalculationActions
+): HeroCombinedState {
+    if (action.type === CHANGE_BATTLE_TYPE || action.type === CHANGE_HERO_SELECTION) {
+        return calculationReducer(state, action as AllCalculationActions);
+    }
+
+    return {
+        heroConfiguration: heroConfigurationReducer(state.heroConfiguration, action),
+        calculation: state.calculation
+    };
 }

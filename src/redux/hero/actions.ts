@@ -1,5 +1,10 @@
 import { HeroClassType } from "../../model/hero-class-type";
-import { Status } from "../../model/status";
+import { Status } from "../../model/status";import {
+  AllCalculationActions,
+  CalculationState,
+  HeroSelection
+} from "./types";
+
 import {
   HeroOwnershipAction,
   CHANGE_HERO_OWNERSHIP,
@@ -37,6 +42,13 @@ import {
   HeroName
 } from "../../model/hero";
 import { StarLevel } from "../../model/star-effect";
+import {
+  BattleType,
+  CHANGE_BATTLE_TYPE,
+  CHANGE_HERO_SELECTION,
+  ChangeBattleTypeAction,
+  ChangeHeroSelectionAction
+} from "./types";
 
 export function changeHeroOwnership(
   name: HeroName,
@@ -241,4 +253,30 @@ export function changeHeroGearSets(
       value: value
     }
   };
+}
+
+export function changeBattleType(
+    battleType: BattleType
+): ChangeBattleTypeAction {
+  return {
+    type: CHANGE_BATTLE_TYPE,
+    payload: battleType
+  };
+}
+
+export function changeHeroSelection(
+    index: number,
+    heroName: HeroName | null,
+    isDps: boolean,
+    isTank: boolean
+): ChangeHeroSelectionAction {
+  return {
+    type: CHANGE_HERO_SELECTION,
+    payload: {
+      index: index,
+      heroName: heroName,
+      isDps: isDps,
+      isTank: isTank
+    }
+  }
 }

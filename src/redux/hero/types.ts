@@ -162,3 +162,46 @@ export type AllHeroActions =
   | HeroArmorRunesAction
   | HeroEnchantsAction
   | HeroGearSetsAction;
+
+
+export enum BattleType {
+  GuildRaid = "Guid Raid",
+  WorldBoss = "World Boss"
+}
+
+export type HeroSelection = {
+  heroName: HeroName | null
+  isTank: boolean
+  isDps: boolean
+  dps: number
+  tankiness: number
+}
+
+export type CalculationState = {
+  battleType: BattleType
+  heroes: [HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection]
+}
+
+export const CHANGE_BATTLE_TYPE = "CHANGE_BATTLE_TYPE";
+export type ChangeBattleTypeActionPayload = BattleType
+
+export type ChangeBattleTypeAction = {
+  type: typeof CHANGE_BATTLE_TYPE;
+  payload: ChangeBattleTypeActionPayload;
+};
+
+export const CHANGE_HERO_SELECTION = "CHANGE_HERO_SELECTION";
+export type ChangeHeroSelectionActionPayload = {
+  index: number
+  heroName: HeroName | null
+  isTank: boolean
+  isDps: boolean
+}
+
+export type ChangeHeroSelectionAction = {
+  type: typeof CHANGE_HERO_SELECTION
+  payload: ChangeHeroSelectionActionPayload
+}
+
+export type AllCalculationActions =
+    ChangeBattleTypeAction | ChangeHeroSelectionAction

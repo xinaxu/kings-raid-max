@@ -44,6 +44,7 @@ export enum HeroName {
     Mirianne = "Mirianne",
     Nia = "Nia",
     Gladi = "Gladi",
+    Kibera = "Kibera",
 
     // Archer
     Selene = "Selene",

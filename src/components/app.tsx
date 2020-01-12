@@ -15,6 +15,7 @@ import {
 import {PrimaryButton} from "office-ui-fabric-react";
 import Navigation from "./navigation";
 import {store} from "../redux/store";
+import Calculation from "./calculation";
 
 initializeIcons();
 
@@ -26,7 +27,7 @@ class App extends React.Component<AppProps> {
     onClickSaveButton(): void {
         window.localStorage.setItem("session", JSON.stringify(store.getState()));
     }
-
+    
     render() {
         return (
             <div className="ms-Grid" dir="ltr">
@@ -35,10 +36,13 @@ class App extends React.Component<AppProps> {
                         <Navigation/>
                         <PrimaryButton text="Save" onClick={this.onClickSaveButton}/>
                     </div>
-                    <div className="ms-Grid-col ms-xl10">
+                    <div className="ms-Grid-col ms-xl7">
                         {this.props.selectedNav.header === HERO_CONFIGURATION ? <HeroConfiguration/> : <div/>}
                         {this.props.selectedNav.header === CLASS_BUFF ? <ClassBuffConfiguration/> : <div/>}
                         {this.props.selectedNav.header === ARTIFACT_CONFIGURATION ? <ArtifactConfiguration/> : <div/>}
+                    </div>
+                    <div className="ms-Grid-col ms-xl3">
+                        <Calculation/>
                     </div>
                 </div>
             </div>
