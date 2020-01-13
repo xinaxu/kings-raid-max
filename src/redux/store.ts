@@ -16,43 +16,35 @@ const defaultState: RootState = {
     heroConfiguration: {
         heroConfiguration: {},
         calculation: {
-            battleType: BattleType.WorldBoss,
-            heroes: [{heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+            battleType: BattleType.WorldBoss1,
+            heroes: [{heroName: null, dps: 0.0, tankiness: 0.0}, {
                 heroName: null,
                 dps: 0.0,
                 tankiness: 0.0,
-                isDps: false,
-                isTank: false
-            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+            }, {heroName: null, dps: 0.0, tankiness: 0.0}, {
                 heroName: null,
                 dps: 0.0,
                 tankiness: 0.0,
-                isDps: false,
-                isTank: false
-            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+            }, {heroName: null, dps: 0.0, tankiness: 0.0}, {
                 heroName: null,
                 dps: 0.0,
                 tankiness: 0.0,
-                isDps: false,
-                isTank: false
-            }, {heroName: null, dps: 0.0, tankiness: 0.0, isDps: false, isTank: false}, {
+            }, {heroName: null, dps: 0.0, tankiness: 0.0}, {
                 heroName: null,
                 dps: 0.0,
                 tankiness: 0.0,
-                isDps: false,
-                isTank: false
             }]
         }
     },
 }
 
-// const initialState: RootState =
-//         defaultState
-
 const initialState: RootState =
-    initialSession === null
-        ? defaultState
-        : JSON.parse(initialSession);
+        defaultState
+
+// const initialState: RootState =
+//     initialSession === null
+//         ? defaultState
+//         : JSON.parse(initialSession);
 
 declare global {
     interface Window {

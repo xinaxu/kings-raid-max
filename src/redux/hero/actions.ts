@@ -267,16 +267,12 @@ export function changeBattleType(
 export function changeHeroSelection(
     index: number,
     heroName: HeroName | null,
-    isDps: boolean,
-    isTank: boolean
 ): ChangeHeroSelectionAction {
   return {
     type: CHANGE_HERO_SELECTION,
     payload: {
       index: index,
-      heroName: heroName,
-      isDps: isDps,
-      isTank: isTank
+      heroName: heroName
     }
   }
 }

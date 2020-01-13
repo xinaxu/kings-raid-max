@@ -4,7 +4,8 @@ import {
   HeroConfiguration,
   SkillTranscendence,
   Accessory,
-  GearSet
+  GearSet,
+  DamageType
 } from "../../model/hero";
 import { StarLevel } from "../../model/star-effect";
 
@@ -165,14 +166,41 @@ export type AllHeroActions =
 
 
 export enum BattleType {
-  GuildRaid = "Guid Raid",
-  WorldBoss = "World Boss"
+  WorldBoss1 = "World Boss - Mountain Fortress",
+  WorldBoss2 = "World Boss - Protianus",
+  WorldBoss3 = "World Boss - Xanadus"
 }
+
+export type BattleInfo = {
+  numOfHeroes: number
+  defence: number
+  attackType: DamageType
+  duration: number
+}
+
+export const BattleInfos : Record<BattleType, BattleInfo> = {
+  [BattleType.WorldBoss1]: {
+    numOfHeroes: 8,
+    defence: 100000,
+    attackType: DamageType.Physical,
+    duration: 330
+  },
+  [BattleType.WorldBoss2]: {
+    numOfHeroes: 8,
+    defence: 10000,
+    attackType: DamageType.Magic,
+    duration: 330
+  },
+  [BattleType.WorldBoss3]: {
+    numOfHeroes: 8,
+    defence: 10000,
+    attackType: DamageType.Magic,
+    duration: 210
+  }
+};
 
 export type HeroSelection = {
   heroName: HeroName | null
-  isTank: boolean
-  isDps: boolean
   dps: number
   tankiness: number
 }
@@ -194,8 +222,6 @@ export const CHANGE_HERO_SELECTION = "CHANGE_HERO_SELECTION";
 export type ChangeHeroSelectionActionPayload = {
   index: number
   heroName: HeroName | null
-  isTank: boolean
-  isDps: boolean
 }
 
 export type ChangeHeroSelectionAction = {

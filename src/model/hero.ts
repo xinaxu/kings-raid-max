@@ -127,6 +127,24 @@ export type HeroInfo = {
     sw: [Effect[], Effect[], Effect[]];
 };
 
+export const HeroInfos: Partial<Record<HeroName, HeroInfo>> = {
+    [HeroName.Phillop]: {
+        heroClass: HeroClassType.Tank,
+        damageType: DamageType.Physical,
+        name: HeroName.Phillop,
+        skills: [{name: "1st skill", light: [], dark: []}, {name: "1st skill", light: [], dark: []}, {
+            name: "1st skill",
+            light: [],
+            dark: []
+        }, {name: "1st skill", light: [], dark: []}],
+        t5Light: [],
+        t5Dark: [],
+        uw: new StarEffectGroup(),
+        ut: [new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup()],
+        sw: [[], [], []]
+    }
+}
+
 export enum SkillTranscendence {
     Neither = "Neither",
     Light = "Light",

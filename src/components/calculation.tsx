@@ -14,7 +14,7 @@ import {Card} from "@uifabric/react-cards";
 import {HeroClassMapping, HeroName} from "../model/hero";
 import {HeroClassType} from "../model/hero-class-type";
 import {changeBattleType, changeHeroSelection} from "../redux/hero/actions";
-import { BattleType } from "../redux/hero/types";
+import {BattleType, BattleInfos} from "../redux/hero/types";
 
 const mapStateToProps = (state: RootState) => {
     return {
@@ -48,9 +48,9 @@ class Calculation extends React.Component<CalculationProps> {
             }));
         }
 
-        let sequence = [0, 1, 2, 3, 4, 5, 6, 7];
-        if (this.props.calculation.battleType === BattleType.GuildRaid) {
-            sequence = [0, 1, 2, 3];
+        let sequence: number[] = [];
+        for (let i = 0; i < BattleInfos[this.props.calculation.battleType].numOfHeroes; ++i) {
+            sequence.push(i);
         }
 
         return (
@@ -77,7 +77,7 @@ class Calculation extends React.Component<CalculationProps> {
                             <Card.Item styles={{root: {width: 124}}}>
                                 <Dropdown selectedKey={this.props.calculation.heroes[i].heroName}
                                           onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
-                                              this.props.onChangeHeroSelection(i, option!.key as HeroName, this.props.calculation.heroes[i].isDps, this.props.calculation.heroes[i].isTank);
+                                              this.props.onChangeHeroSelection(i, option!.key as HeroName);
                                           }}
                                           options={options}/>
                                 {
@@ -94,18 +94,10 @@ class Calculation extends React.Component<CalculationProps> {
                                 {
                                     this.props.calculation.heroes[i].heroName === null ? (<div></div>) : (
                                         <div>
-                                            <Toggle label="Calculate DPS"
-                                                    checked={this.props.calculation.heroes[i].isDps}
-                                                    onChange={(event: React.MouseEvent<HTMLElement>, checked?: boolean) => {
-                                                        this.props.onChangeHeroSelection(i, this.props.calculation.heroes[i].heroName, checked!, this.props.calculation.heroes[i].isTank);
-                                                    }}/> 
-                                                    {this.props.calculation.heroes[i].isDps ? this.props.calculation.heroes[i].dps : "N/A"}
-                                            <Toggle label="Calculate Tankiness"
-                                                    checked={this.props.calculation.heroes[i].isTank}
-                                                    onChange={(event: React.MouseEvent<HTMLElement>, checked?: boolean) => {
-                                                        this.props.onChangeHeroSelection(i, this.props.calculation.heroes[i].heroName, this.props.calculation.heroes[i].isDps, checked!);
-                                                    }}/>
-                                            {this.props.calculation.heroes[i].isTank ? this.props.calculation.heroes[i].tankiness : "N/A"}
+                                            <Label>DPS:</Label>
+                                            {this.props.calculation.heroes[i].dps}
+                                            <Label>Tankiness:</Label>
+                                            {this.props.calculation.heroes[i].tankiness}
                                         </div>
                                     )
                                 }
