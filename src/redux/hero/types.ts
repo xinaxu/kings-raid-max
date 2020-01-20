@@ -8,6 +8,7 @@ import {
   DamageType
 } from "../../model/hero";
 import { StarLevel } from "../../model/star-effect";
+import {BattleCalculation} from "../../model/calculation/types";
 
 export type HeroConfigurationState = Partial<
   Record<HeroName, HeroConfiguration>
@@ -201,13 +202,12 @@ export const BattleInfos : Record<BattleType, BattleInfo> = {
 
 export type HeroSelection = {
   heroName: HeroName | null
-  dps: number
-  tankiness: number
 }
 
 export type CalculationState = {
   battleType: BattleType
-  heroes: [HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection]
+  heroes: [HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection, HeroSelection],
+  battleCalculation: BattleCalculation
 }
 
 export const CHANGE_BATTLE_TYPE = "CHANGE_BATTLE_TYPE";

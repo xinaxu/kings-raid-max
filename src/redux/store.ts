@@ -4,12 +4,13 @@ import {RootState} from "./types";
 import {allReducers} from "./reducers";
 import {HERO_CONFIGURATION} from "./navigation/types";
 import {BattleType} from "./hero/types";
+import {DamageType} from "../model/hero";
 
 const initialSession = window.localStorage.getItem("session");
 const defaultState: RootState = {
     selectedNav: {
         header: HERO_CONFIGURATION,
-        heroClass: HeroClassType.Tank
+        heroClass: HeroClassType.Knight
     },
     artifactConfiguration: {},
     classBuffs: {},
@@ -17,23 +18,23 @@ const defaultState: RootState = {
         heroConfiguration: {},
         calculation: {
             battleType: BattleType.WorldBoss1,
-            heroes: [{heroName: null, dps: 0.0, tankiness: 0.0}, {
+            heroes: [{heroName: null}, {
+                heroName: null
+            }, {heroName: null}, {
                 heroName: null,
-                dps: 0.0,
-                tankiness: 0.0,
-            }, {heroName: null, dps: 0.0, tankiness: 0.0}, {
-                heroName: null,
-                dps: 0.0,
-                tankiness: 0.0,
-            }, {heroName: null, dps: 0.0, tankiness: 0.0}, {
-                heroName: null,
-                dps: 0.0,
-                tankiness: 0.0,
-            }, {heroName: null, dps: 0.0, tankiness: 0.0}, {
-                heroName: null,
-                dps: 0.0,
-                tankiness: 0.0,
-            }]
+            }, {heroName: null}, {
+                heroName: null
+            }, {heroName: null}, {
+                heroName: null
+            }],
+            battleCalculation: {
+                heroes: [],
+                enemy: {
+                    damageType: DamageType.Physical,
+                    stats: {},
+                    effects: []
+                }
+            }
         }
     },
 }

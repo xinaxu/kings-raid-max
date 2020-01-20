@@ -1,8 +1,8 @@
 import { Status } from "./status";
 
 export enum EffectType {
+  BasicStatus,
   StatusChange,
-  StatusChangeAbsolute,
   CcImmunity,
   Cc,
   CooldownReduction,
@@ -43,8 +43,8 @@ export type EffectMultiplier = {
 export class Effect {
   type: EffectType = EffectType.StatusChange;
   destination: EffectDestination = EffectDestination.Self;
-  status?: Status;
-  value?: number;
+  status: Status = Status.Acc;
+  value: number = 0.0;
   fromStatus?: Status;
   trigger?: EffectTrigger;
   multiplier?: EffectMultiplier;
@@ -54,6 +54,7 @@ export class Effect {
   ending?: number;
   allyStackEfficiency?: number;
   _dispellable?: boolean;
+  isPercentage: boolean = true;
 
   constructor(type: EffectType) {
     this.type = type;
@@ -75,13 +76,12 @@ export class Effect {
     }
 
     switch (this.type) {
-      case EffectType.StatusChangeAbsolute:
       case EffectType.StatusChange:
         descriptions.push(
           `${this.value! > 0 ? "increase" : "reduce"} ${this.destination} ${
             this.status
           } by ${this.value! > 0 ? this.value! : -this.value!} ${
-            this.type === EffectType.StatusChange ? " percentage" : ""
+            this.isPercentage ? " percentage" : ""
           }` + (this.fromStatus !== undefined ? ` of ${this.fromStatus}` : "")
         );
 
@@ -198,6 +198,7 @@ export class Effect {
     ending?: number;
     _dispellable?: boolean;
     allyStackEfficiency?: number;
+    isPercentage?: boolean
   }): this {
     if (override.type !== undefined) {
       this.type = override.type;
@@ -237,6 +238,9 @@ export class Effect {
     }
     if (override.allyStackEfficiency !== undefined) {
       this.allyStackEfficiency = override.allyStackEfficiency;
+    }
+    if (override.isPercentage !== undefined) {
+      this.isPercentage = override.isPercentage;
     }
 
     return this;

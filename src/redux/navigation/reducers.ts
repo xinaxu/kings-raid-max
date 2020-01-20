@@ -9,7 +9,7 @@ import { HeroClassType } from "../../model/hero-class-type";
 export function navigationReducer(
   state: NavigationState = {
     header: HERO_CONFIGURATION,
-    heroClass: HeroClassType.Tank
+    heroClass: HeroClassType.Knight
   },
   action: NavigationAction
 ): NavigationState {

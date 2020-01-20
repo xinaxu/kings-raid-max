@@ -95,9 +95,9 @@ class Calculation extends React.Component<CalculationProps> {
                                     this.props.calculation.heroes[i].heroName === null ? (<div></div>) : (
                                         <div>
                                             <Label>DPS:</Label>
-                                            {this.props.calculation.heroes[i].dps}
+                                            {this.props.calculation.battleCalculation.heroes[i]?.dps}
                                             <Label>Tankiness:</Label>
-                                            {this.props.calculation.heroes[i].tankiness}
+                                            {this.props.calculation.battleCalculation.heroes[i]?.tankiness}
                                         </div>
                                     )
                                 }

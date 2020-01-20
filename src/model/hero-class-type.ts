@@ -1,5 +1,5 @@
 ﻿export enum HeroClassType {
-  Tank = "Tank",
+  Knight = "Knight",
   Warrior = "Warrior",
   Assassin = "Assassin",
   Archer = "Archer",

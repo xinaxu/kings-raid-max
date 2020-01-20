@@ -4,7 +4,7 @@ import {StarEffectGroup, StarLevel} from "./star-effect";
 import {Status} from "./status";
 
 export enum HeroName {
-    // Tank
+    // Knight
     Phillop = "Phillop",
     Clause = "Clause",
     Demia = "Demia",
@@ -129,7 +129,7 @@ export type HeroInfo = {
 
 export const HeroInfos: Partial<Record<HeroName, HeroInfo>> = {
     [HeroName.Phillop]: {
-        heroClass: HeroClassType.Tank,
+        heroClass: HeroClassType.Knight,
         damageType: DamageType.Physical,
         name: HeroName.Phillop,
         skills: [{name: "1st skill", light: [], dark: []}, {name: "1st skill", light: [], dark: []}, {
@@ -168,7 +168,7 @@ export enum Accessory {
 }
 
 export const HeroClassMapping: Record<HeroClassType, HeroName[]> = {
-    Tank: [HeroName.Phillop, HeroName.Clause, HeroName.Aselica, HeroName.Demia, HeroName.Dosarta, HeroName.Glenwys, HeroName.Jane, HeroName.Loman, HeroName.Morrah, HeroName.Neraxis, HeroName.Ricardo, HeroName.Sonia],
+    Knight: [HeroName.Phillop, HeroName.Clause, HeroName.Aselica, HeroName.Demia, HeroName.Dosarta, HeroName.Glenwys, HeroName.Jane, HeroName.Loman, HeroName.Morrah, HeroName.Neraxis, HeroName.Ricardo, HeroName.Sonia],
     Warrior: [HeroName.Bernheim, HeroName.Chase, HeroName.Gau, HeroName.Kasel, HeroName.Kirze, HeroName.Naila, HeroName.Nicky, HeroName.Priscilla, HeroName.Scarlet, HeroName.Seria, HeroName.Theo, HeroName.Viska],
     Assassin: [HeroName.Epis, HeroName.Erze, HeroName.Ezekiel, HeroName.Fluss, HeroName.Gladi, HeroName.Laudia, HeroName.Mirianne, HeroName.Nia, HeroName.Reina, HeroName.Roi, HeroName.Tanya],
     Archer: [HeroName.Arch, HeroName.Dimael, HeroName.Luna, HeroName.Requina, HeroName.Selene, HeroName.Shamilla, HeroName.Yanne, HeroName.Yuria, HeroName.Zafir],
