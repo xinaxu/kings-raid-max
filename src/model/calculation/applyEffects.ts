@@ -2,120 +2,160 @@
 import {EffectDestination, EffectType} from "../effect";
 import {Status} from "../status";
 
-export function applyEffects(battle: BattleCalculation) {
-    Object.values(Status).forEach(status => {
-        battle.enemy.stats[status] = 0;
+function updateFinalStats(battle: BattleCalculation) {
+    battle.heroes.forEach(hero => {
+        if (hero !== undefined) {
+            Object.values(Status).forEach(status => {
+                hero.finalStats[status] = hero.basicStats[status]! + hero.buffs[status]!;
+            });
+            
+            hero.finalStats[Status.FlatAtk] = hero.basicStats[Status.FlatAtk]! * (1 + hero.basicStats[Status.Atk]! / 100) * (1 + hero.buffs[Status.Atk]! / 100) + hero.buffs[Status.FlatAtk]!;
+            hero.finalStats[Status.FlatHp] = hero.basicStats[Status.FlatHp]! * (1 + hero.basicStats[Status.Hp]! / 100)* (1 + hero.buffs[Status.Hp]! / 100) + hero.buffs[Status.FlatHp]!;
+            hero.finalStats[Status.FlatPDef] = (hero.basicStats[Status.FlatPDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.PDef]! / 100 + hero.basicStats[Status.Def]! / 100) * (1 + hero.buffs[Status.PDef]! / 100 + hero.buffs[Status.Def]! / 100) + hero.buffs[Status.FlatPDef]! + hero.buffs[Status.FlatDef]!;
+            hero.finalStats[Status.FlatMDef] = (hero.basicStats[Status.FlatMDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.MDef]! / 100 + hero.basicStats[Status.Def]! / 100) * (1 + hero.buffs[Status.MDef]! / 100 + hero.buffs[Status.Def]! / 100) + hero.buffs[Status.FlatMDef]! + hero.buffs[Status.FlatDef]!;
+            hero.finalStats[Status.FlatDef] = 0;
+            hero.finalStats[Status.PDodge] = hero.finalStats[Status.PDodge]! + hero.finalStats[Status.Dodge]!;
+            hero.finalStats[Status.MDodge] = hero.finalStats[Status.MDodge]! + hero.finalStats[Status.Dodge]!;
+            hero.finalStats[Status.Dodge] = 0;
+            hero.finalStats[Status.PBlock] = hero.finalStats[Status.PBlock]! + hero.finalStats[Status.Block]!;
+            hero.finalStats[Status.MBlock] = hero.finalStats[Status.MBlock]! + hero.finalStats[Status.Block]!;
+            hero.finalStats[Status.Block] = 0;
+            hero.finalStats[Status.PBlockDef] = hero.finalStats[Status.PBlockDef]! + hero.finalStats[Status.BlockDef]!;
+            hero.finalStats[Status.MBlockDef] = hero.finalStats[Status.MBlockDef]! + hero.finalStats[Status.BlockDef]!;
+            hero.finalStats[Status.BlockDef] = 0;
+            hero.finalStats[Status.PTough] = hero.finalStats[Status.PTough]! + hero.finalStats[Status.Tough]!;
+            hero.finalStats[Status.MTough] = hero.finalStats[Status.MTough]! + hero.finalStats[Status.Tough]!;
+            hero.finalStats[Status.Tough] = 0;
+            hero.finalStats[Status.PCritResistance] = hero.finalStats[Status.PCritResistance]! + hero.finalStats[Status.CritResistance]!;
+            hero.finalStats[Status.MCritResistance] = hero.finalStats[Status.MCritResistance]! + hero.finalStats[Status.CritResistance]!;
+            hero.finalStats[Status.CritResistance] = 0;
+            hero.finalStats[Status.PDps] = hero.finalStats[Status.PDps]! + hero.finalStats[Status.Dps]!;
+            hero.finalStats[Status.MDps] = hero.finalStats[Status.MDps]! + hero.finalStats[Status.Dps]!;
+            hero.finalStats[Status.Dps] = 0;
+            hero.finalStats[Status.PWeakness] = hero.finalStats[Status.PWeakness]! + hero.finalStats[Status.Weakness]!;
+            hero.finalStats[Status.MWeakness] = hero.finalStats[Status.MWeakness]! + hero.finalStats[Status.Weakness]!;
+            hero.finalStats[Status.Weakness] = 0;
+        }
     });
-    
+}
+
+export function applyEffects(battle: BattleCalculation) {
+    // Enemy init
+    Object.values(Status).forEach(status => {
+        battle.enemy.basicStats[status] = 0;
+        battle.enemy.buffs[status] = 0;
+        battle.enemy.finalStats[status] = 0;
+    });
+
+    // Heroes init
     battle.heroes.forEach(hero => {
         if (hero === undefined) {
             return;
         }
 
         Object.values(Status).forEach(status => {
-            hero.stats[status] = 0;
+            hero.basicStats[status] = 0;
+            hero.buffs[status] = 0;
+            hero.finalStats[status] = 0;
         });
     });
 
+    // Heroes Basic Status
     battle.heroes.forEach(hero => {
-        if (hero === undefined) {
-            return;
+        if (hero !== undefined) {
+            hero.effects.filter(effect => effect.type === EffectType.BasicStatus).forEach(effect => {
+                hero.basicStats[effect.status]! += effect.value;
+            });
+
+            // Update HP, Atk, MDef, PDef
+            hero.basicStats[Status.FlatAtk] = hero.basicStats[Status.FlatAtk]! * (1 + hero.basicStats[Status.Atk]! / 100);
+            hero.basicStats[Status.FlatHp] = hero.basicStats[Status.FlatHp]! * (1 + hero.basicStats[Status.Hp]! / 100);
+            hero.basicStats[Status.FlatPDef] = (hero.basicStats[Status.FlatPDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.PDef]! / 100 + hero.basicStats[Status.Def]! / 100);
+            hero.basicStats[Status.FlatMDef] = (hero.basicStats[Status.FlatMDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.MDef]! / 100 + hero.basicStats[Status.Def]! / 100);
+            hero.basicStats[Status.FlatDef] = 0;
         }
-
-        // Self and allies percentage buff
-        hero.effects.forEach(effect => {
-            if (effect.type === EffectType.StatusChange && effect.isPercentage && effect.fromStatus === undefined) {
-                switch (effect.destination) {
-                    case EffectDestination.Self:
-                        hero.stats[effect.status]! += effect.value;
-                        break;
-                    case EffectDestination.Allies:
-                        battle.heroes.forEach(allyhero => {
-                            if (allyhero !== undefined) {
-                                allyhero.stats[effect.status]! += effect.value;
-                            }
-                        });
-                        break;
-                }
-            }
-        });
-
-        // Self Basic Status
-        let hp = 0, atk = 0, mdef = 0, pdef = 0;
-        hero.effects.forEach(effect => {
-            if (effect.type === EffectType.BasicStatus) {
-                switch (effect.status) {
-                    case Status.Hp:
-                        hp += effect.value;
-                        break;
-                    case Status.Atk:
-                        atk += effect.value;
-                        break;
-                    case Status.Def:
-                        pdef += effect.value;
-                        mdef += effect.value;
-                        break;
-                    case Status.PDef:
-                        pdef += effect.value;
-                        break;
-                    case Status.MDef:
-                        mdef += effect.value;
-                        break;
-                    default:
-                        hero.stats[effect.status]! += effect.value;
-                        break;
-                }
-            }
-        });
-
-        hero.stats[Status.Hp] = hp * (1 + hero.stats[Status.Hp]! / 100);
-        hero.stats[Status.Atk] = atk * (1 + hero.stats[Status.Atk]! / 100);
-        hero.stats[Status.PDef] = pdef * (1 + (hero.stats[Status.PDef]! + hero.stats[Status.Def]!) / 100);
-        hero.stats[Status.MDef] = pdef * (1 + (hero.stats[Status.MDef]! + hero.stats[Status.Def]!) / 100);
-        hero.stats[Status.Def] = 0;
-
-        // Self or Allies flat buff
-        hero.effects.forEach(effect => {
-            if (effect.type === EffectType.StatusChange && !effect.isPercentage) {
-                switch (effect.destination) {
-                    case EffectDestination.Self:
-                        hero.stats[effect.status]! += effect.value;
-
-                        break;
-                    case EffectDestination.Allies:
-                        battle.heroes.forEach(allyhero => {
-                            if (allyhero !== undefined) {
-                                allyhero.stats[effect.status]! += effect.value;
-                            }
-                        });
-                        break;
-                }
-            }
-        });
-
-        // Cross percentage buff
-        hero.effects.forEach(effect => {
-            if (effect.type === EffectType.StatusChange && effect.fromStatus !== undefined) {
-                switch (effect.destination) {
-                    case EffectDestination.Self:
-                        hero.stats[effect.status]! += effect.value * hero.stats[effect.fromStatus]!;
-                        break;
-                    case EffectDestination.Allies:
-                        battle.heroes.forEach(allyhero => {
-                            if (allyhero !== undefined) {
-                                allyhero.stats[effect.status]! += effect.value * hero.stats[effect.fromStatus!]!;
-                            }
-                        });
-                        break;
-                    case EffectDestination.TopDps:
-                        let topDps = Math.max.apply(Math, battle.heroes.map(_ => _?.stats[Status.Atk] ?? 0));
-                        let topDpsHero = battle.heroes.find(_ => _?.stats[Status.Atk] === topDps);
-                        if (topDpsHero !== undefined) {
-                            topDpsHero.stats[effect.status]! += effect.value * hero.stats[effect.fromStatus]!;
-                        }
-                        break;
-                }
-            }
-        });
     });
+
+    // Enemy Basic Status
+    battle.enemy.effects.filter(effect => effect.type === EffectType.BasicStatus).forEach(effect => {
+        battle.enemy.basicStats[effect.status]! += effect.value;
+    });
+
+    // Apply Buffs, excluding TopDps or CrossStatus
+    battle.heroes.forEach(hero => {
+        if (hero !== undefined) {
+            hero.effects.filter(effect => effect.type === EffectType.StatusChange && effect.fromStatus === undefined && effect.destination !== EffectDestination.TopDps).forEach(effect => {
+                switch (effect.destination) {
+                    case EffectDestination.Self:
+                        hero.buffs[effect.status]! += effect.value;
+                        break;
+                    case EffectDestination.Allies:
+                        battle.heroes.forEach(ally => {
+                            if (ally !== undefined) {
+                                ally.buffs[effect.status]! += effect.value;
+                            }
+                        });
+                        break;
+                    case EffectDestination.Enemies:
+                    case EffectDestination.SingleEnemy:
+                        battle.enemy.buffs[effect.status]! += effect.value;
+                        break;
+                }
+            });
+        }
+    });
+    
+    // Update enemy final stats
+    Object.values(Status).forEach(status => {
+        battle.enemy.finalStats[status] = battle.enemy.basicStats[status]! + battle.enemy.buffs[status]!;
+    });
+
+    battle.enemy.finalStats[Status.FlatAtk] = battle.enemy.basicStats[Status.FlatAtk]! * (1 + battle.enemy.basicStats[Status.Atk]! / 100) * (1 + battle.enemy.buffs[Status.Atk]! / 100) + battle.enemy.buffs[Status.FlatAtk]!;
+    battle.enemy.finalStats[Status.FlatPDef] = (battle.enemy.basicStats[Status.FlatPDef]! + battle.enemy.basicStats[Status.FlatDef]!) * (1 + battle.enemy.buffs[Status.PDef]! / 100 + battle.enemy.buffs[Status.Def]! / 100) + battle.enemy.buffs[Status.FlatPDef]! + battle.enemy.buffs[Status.FlatDef]!;
+    battle.enemy.finalStats[Status.FlatMDef] = (battle.enemy.basicStats[Status.FlatMDef]! + battle.enemy.basicStats[Status.FlatDef]!) * (1 + battle.enemy.buffs[Status.MDef]! / 100 + battle.enemy.buffs[Status.Def]! / 100) + battle.enemy.buffs[Status.FlatMDef]! + battle.enemy.buffs[Status.FlatDef]!;
+    battle.enemy.finalStats[Status.FlatDef] = 0;
+    
+    updateFinalStats(battle);
+    
+    // Apply Buffs, Cross Status, but not Top Dps
+    battle.heroes.forEach(hero => {
+        if (hero !== undefined) {
+            hero.effects.filter(effect => effect.type === EffectType.StatusChange && effect.fromStatus !== undefined && effect.destination !== EffectDestination.TopDps).forEach(effect => {
+                switch (effect.destination) {
+                    case EffectDestination.Self:
+                        hero.buffs[effect.status]! += effect.value * hero.finalStats[effect.fromStatus!]!;
+                        break;
+                    case EffectDestination.Allies:
+                        battle.heroes.forEach(ally => {
+                            if (ally !== undefined) {
+                                ally.buffs[effect.status]! += effect.value * hero.finalStats[effect.fromStatus!]!;
+                            }
+                        });
+                        break;
+                }
+            });
+        }
+    });
+    
+    updateFinalStats(battle);
+    
+    // Apply Buffs, Top Dps
+    let topDps = Math.max.apply(Math, battle.heroes.map(_ => _?.finalStats[Status.FlatAtk] ?? 0));
+    let topDpsHero = battle.heroes.find(_ => _?.finalStats[Status.FlatAtk] === topDps);
+    if (topDpsHero !== undefined) {
+        battle.heroes.forEach(hero => {
+            if (hero !== undefined) {
+                hero.effects.filter(effect => effect.type === EffectType.StatusChange && effect.destination === EffectDestination.TopDps).forEach(effect => {
+                    if (effect.fromStatus === undefined) {
+                        topDpsHero!.buffs[effect.status]! += effect.value;
+                    }
+                    else {
+                        topDpsHero!.buffs[effect.status]! += effect.value * hero.finalStats[effect.fromStatus]!;
+                    }
+                });
+            }
+        });
+    }
+    
+    updateFinalStats(battle);
 }

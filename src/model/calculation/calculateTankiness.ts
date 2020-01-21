@@ -1,25 +1,26 @@
 ﻿import {BattleCalculation} from "./types";
 import {Status} from "../status";
 import {DamageType} from "../hero";
+import {normalize} from "./normalizer";
 
 export function calculateTankiness(battle: BattleCalculation) {
     battle.heroes.forEach(hero => {
         if (hero !== undefined) {
-            let tankiness = hero.stats[Status.Hp]!;
+            let tankiness = hero.finalStats[Status.FlatHp]!;
             let defence, dodge, block, blockdef, tough;
-            if (battle.enemy.damageType === DamageType.Physical) {
-                defence = hero.stats[Status.PDef]!;
-                dodge = hero.stats[Status.PDodge]!;
-                block = hero.stats[Status.PBlock]!;
-                blockdef = hero.stats[Status.PBlockDef]!;
-                tough = hero.stats[Status.PTough]!;
+            if (battle.info.attackType === DamageType.Physical) {
+                defence = hero.finalStats[Status.FlatPDef]!;
+                dodge = normalize(hero, Status.PDodge);
+                block = normalize(hero, Status.PBlock);
+                blockdef = normalize(hero, Status.PBlockDef);
+                tough = normalize(hero, Status.PTough);
             }
             else {
-                defence = hero.stats[Status.MDef]!;
-                dodge = hero.stats[Status.MDodge]!;
-                block = hero.stats[Status.MBlock]!;
-                blockdef = hero.stats[Status.MBlockDef]!;
-                tough = hero.stats[Status.MTough]!;
+                defence = hero.finalStats[Status.FlatMDef]!;
+                dodge = normalize(hero, Status.MDodge);
+                block = normalize(hero, Status.MBlock);
+                blockdef = normalize(hero, Status.MBlockDef);
+                tough = normalize(hero, Status.MTough);
             }
             
             tankiness /= (1 - dodge / 100);

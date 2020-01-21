@@ -54,7 +54,6 @@ export class Effect {
   ending?: number;
   allyStackEfficiency?: number;
   _dispellable?: boolean;
-  isPercentage: boolean = true;
 
   constructor(type: EffectType) {
     this.type = type;
@@ -81,7 +80,7 @@ export class Effect {
           `${this.value! > 0 ? "increase" : "reduce"} ${this.destination} ${
             this.status
           } by ${this.value! > 0 ? this.value! : -this.value!} ${
-            this.isPercentage ? " percentage" : ""
+            !this.status.includes("Value") ? " percentage" : ""
           }` + (this.fromStatus !== undefined ? ` of ${this.fromStatus}` : "")
         );
 
@@ -198,7 +197,6 @@ export class Effect {
     ending?: number;
     _dispellable?: boolean;
     allyStackEfficiency?: number;
-    isPercentage?: boolean
   }): this {
     if (override.type !== undefined) {
       this.type = override.type;
@@ -238,9 +236,6 @@ export class Effect {
     }
     if (override.allyStackEfficiency !== undefined) {
       this.allyStackEfficiency = override.allyStackEfficiency;
-    }
-    if (override.isPercentage !== undefined) {
-      this.isPercentage = override.isPercentage;
     }
 
     return this;

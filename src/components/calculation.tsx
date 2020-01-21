@@ -15,6 +15,7 @@ import {HeroClassMapping, HeroName} from "../model/hero";
 import {HeroClassType} from "../model/hero-class-type";
 import {changeBattleType, changeHeroSelection} from "../redux/hero/actions";
 import {BattleType, BattleInfos} from "../redux/hero/types";
+import {Status} from "../model/status";
 
 const mapStateToProps = (state: RootState) => {
     return {
@@ -55,12 +56,7 @@ class Calculation extends React.Component<CalculationProps> {
 
         return (
             <Stack tokens={{childrenGap: 20}}>
-                <Card>
-                    <Card.Item>
-                        <Text variant="xLarge">
-                            Battle Type
-                        </Text>
-                    </Card.Item>
+                <Card horizontal>
                     <Card.Item>
                         <ChoiceGroup selectedKey={this.props.calculation.battleType}
                                      options={Object.values(BattleType).map(battleType => {
@@ -69,6 +65,22 @@ class Calculation extends React.Component<CalculationProps> {
                                      onChange={(ev?: React.FormEvent<HTMLElement | HTMLInputElement>, option?: IChoiceGroupOption) => {
                                          this.props.onChangeBattleType(option!.key as BattleType);
                                      }}/>
+                    </Card.Item>
+                    <Card.Item>
+                        <div>
+                            {Object.values(Status).map(status => {
+                                return [status, this.props.calculation.battleCalculation.enemy.finalStats[status]!];
+                            }).filter(value => {
+                                return value[1] !== 0 && value[1] !== undefined;
+                            }).map(value => {
+                                return (
+                                    <div key={value[0]}>
+                                        <Label>{value[0]}:</Label>
+                                        {value[1].toLocaleString()}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </Card.Item>
                 </Card>
                 {sequence.map(i => {
@@ -95,9 +107,42 @@ class Calculation extends React.Component<CalculationProps> {
                                     this.props.calculation.heroes[i].heroName === null ? (<div></div>) : (
                                         <div>
                                             <Label>DPS:</Label>
-                                            {this.props.calculation.battleCalculation.heroes[i]?.dps}
+                                            {this.props.calculation.battleCalculation.heroes[i]?.dps.toLocaleString()}
                                             <Label>Tankiness:</Label>
-                                            {this.props.calculation.battleCalculation.heroes[i]?.tankiness}
+                                            {this.props.calculation.battleCalculation.heroes[i]?.tankiness.toLocaleString()}
+                                            <Label>CC:</Label>
+                                            {this.props.calculation.battleCalculation.heroes[i]?.cc.toLocaleString()}
+                                            <Label>Dispel:</Label>
+                                            {this.props.calculation.battleCalculation.heroes[i]?.dispel.toLocaleString()}
+                                            <Label>Cleanse:</Label>
+                                            {this.props.calculation.battleCalculation.heroes[i]?.cleanse.toLocaleString()}
+                                        </div>
+                                    )
+                                }
+                            </Card.Item>
+                            <Card.Item>
+                                {
+                                    this.props.calculation.heroes[i].heroName === null ? (<div></div>) : (
+                                        <div>
+                                            <Toggle label={"Show Details"} defaultChecked={false}
+                                                    onChange={(event: React.MouseEvent<HTMLElement>, checked?: boolean) => {
+                                                        document.getElementById(`${this.props.calculation.heroes[i].heroName}-details`)!.style.display = checked === true ? "inline" : "none";
+                                                    }}/>
+                                            <div id={`${this.props.calculation.heroes[i].heroName}-details`}
+                                                 style={{display: "none"}}>
+                                                {Object.values(Status).map(status => {
+                                                    return [status, this.props.calculation.battleCalculation.heroes[i]?.finalStats[status]!];
+                                                }).filter(value => {
+                                                    return value[1] !== 0 && value[1] !== undefined;
+                                                }).map(value => {
+                                                    return (
+                                                        <div key={value[0]}>
+                                                            <Label>{value[0]}:</Label>
+                                                            {value[1].toLocaleString()}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     )
                                 }

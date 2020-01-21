@@ -1,5 +1,5 @@
 import {Status} from "../../model/status";
-import {Accessory, DamageType, GearSet, HeroInfo, HeroInfos, HeroName, SkillTranscendence} from "../../model/hero";
+import {Accessory, GearSet, HeroInfo, HeroInfos, HeroName, SkillTranscendence} from "../../model/hero";
 import {
     AllCalculationActions,
     AllHeroActions,
@@ -9,6 +9,7 @@ import {
     CHANGE_BATTLE_TYPE,
     CHANGE_HERO_ACCESSORY,
     CHANGE_HERO_ARMOR_RUNES,
+    CHANGE_HERO_ARTIFACT,
     CHANGE_HERO_ENCHANTS,
     CHANGE_HERO_GEARLINE,
     CHANGE_HERO_GEARSET,
@@ -29,9 +30,10 @@ import {updateArmor} from "../../model/calculation/armor";
 import {BattleCalculation} from "../../model/calculation/types";
 import {applyEffects} from "../../model/calculation/applyEffects";
 import {updateWeapon} from "../../model/calculation/weapon";
-import {normalize} from "../../model/calculation/normalizer";
 import {calculateDps} from "../../model/calculation/calculateDps";
 import {calculateTankiness} from "../../model/calculation/calculateTankiness";
+import {updateBasic} from "../../model/calculation/basicStatus";
+import {updateTreasure} from "../../model/calculation/treasure";
 
 export function calculationReducer(
     state: {
@@ -53,10 +55,12 @@ export function calculationReducer(
             battleCalculation: {
                 heroes: [],
                 enemy: {
-                    damageType: DamageType.Physical,
-                    stats: {},
+                    basicStats: {},
+                    finalStats: {},
+                    buffs: {},
                     effects: []
-                }
+                },
+                info: BattleInfos[BattleType.WorldBoss1]
             }
         }
     },
@@ -112,14 +116,15 @@ export function calculationReducer(
 function reCalculate(state: HeroCombinedState): CalculationState {
     let newState: CalculationState = {...state.calculation};
     let numOfHeroes: number = BattleInfos[state.calculation.battleType].numOfHeroes;
-    let enemyDamageType = BattleInfos[state.calculation.battleType].attackType;
     let battle: BattleCalculation = {
         heroes: [],
         enemy: {
-            damageType: enemyDamageType,
             effects: [],
-            stats: {}
-        }
+            basicStats: {},
+            finalStats: {},
+            buffs: {},
+        },
+        info: BattleInfos[state.calculation.battleType]
     };
     newState.battleCalculation = battle;
     for (let i = 0; i < numOfHeroes; ++i) {
@@ -139,49 +144,29 @@ function reCalculate(state: HeroCombinedState): CalculationState {
         }
 
         battle.heroes[i] = {
-            stats: {},
+            basicStats: {},
+            finalStats: {},
+            buffs: {},
             effects: [],
             heroInfo: heroInfo,
             heroConfiguration: configuration,
             dps: 0,
-            tankiness: 0
+            tankiness: 0,
+            cc: 0,
+            dispel: 0,
+            cleanse: 0
         };
     }
 
+    updateBasic(battle);
     updateArmor(battle);
     updateWeapon(battle);
+    updateTreasure(battle);
     applyEffects(battle);
-    normalize(battle);
     calculateDps(battle);
     calculateTankiness(battle);
     return newState;
 };
-
-/* Base Status - Unique Treasure
-for(let ut of configuration.utLevel) {
-    switch(ut) {
-        case 0:
-            heroStatus[i].baseHp += 1361742;
-            break;
-        case 1:
-            heroStatus[i].baseHp += 1497907;
-            break;
-        case 2:
-            heroStatus[i].baseHp += 1770264;
-            break;
-        case 3:
-            heroStatus[i].baseHp += 2178785;
-            break;
-        case 4:
-            heroStatus[i].baseHp += 2723485;
-            break;
-        case 5:
-            heroStatus[i].baseHp += 3404349;
-            break;
-    }
-}
-}
-*/
 
 function copyHeroConfigurationState(
     state: HeroConfigurationState,
@@ -228,7 +213,8 @@ function copyHeroConfigurationState(
             uwRunes: [null, null, null],
             armorRunes: [null, null],
             enchants: [null, null, null, null],
-            gearSets: [GearSet.BlackDragon, GearSet.BlackDragon]
+            gearSets: [GearSet.BlackDragon, GearSet.BlackDragon],
+            artifact: null
         };
     }
 
@@ -318,6 +304,17 @@ function heroConfigurationReducer(
             newState[action.payload.name]!.gearSets[action.payload.id - 1] =
                 action.payload.value;
             break;
+        case CHANGE_HERO_ARTIFACT:
+            newState = copyHeroConfigurationState(state, action.payload.name);
+            Object.values(HeroName).forEach(heroName => {
+                if (newState[heroName] !== undefined) {
+                    if (newState[heroName]!.artifact === action.payload.value) {
+                        newState[heroName]!.artifact = null;
+                    }
+                }
+            });
+            newState[action.payload.name]!.artifact = action.payload.value;
+            break;
         default:
             return state;
     }
@@ -347,10 +344,12 @@ export function heroCombinedReducer(
             battleCalculation: {
                 heroes: [],
                 enemy: {
-                    damageType: DamageType.Physical,
-                    stats: {},
+                    basicStats: {},
+                    finalStats: {},
+                    buffs: {},
                     effects: []
-                }
+                },
+                info: BattleInfos[BattleType.WorldBoss1]
             }
         }
     },

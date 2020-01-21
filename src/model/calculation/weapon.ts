@@ -74,7 +74,7 @@ export function updateWeapon(battle: BattleCalculation) {
     battle.heroes.forEach(hero => {
         if (hero !== undefined) {
             let baseAttack = uwAttackValues[hero.heroInfo.heroClass][hero.heroConfiguration.uwLevel === null ? 'null' : hero.heroConfiguration.uwLevel];
-            hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.Atk, value: baseAttack}));
+            hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatAtk, value: baseAttack}));
         }
     });
 }

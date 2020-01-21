@@ -3,8 +3,7 @@ import {compose, createStore} from "redux";
 import {RootState} from "./types";
 import {allReducers} from "./reducers";
 import {HERO_CONFIGURATION} from "./navigation/types";
-import {BattleType} from "./hero/types";
-import {DamageType} from "../model/hero";
+import {BattleInfos, BattleType} from "./hero/types";
 
 const initialSession = window.localStorage.getItem("session");
 const defaultState: RootState = {
@@ -30,14 +29,16 @@ const defaultState: RootState = {
             battleCalculation: {
                 heroes: [],
                 enemy: {
-                    damageType: DamageType.Physical,
-                    stats: {},
+                    basicStats: {},
+                    finalStats: {},
+                    buffs: {},
                     effects: []
-                }
+                },
+                info: BattleInfos[BattleType.WorldBoss1]
             }
         }
     },
-}
+};
 
 const initialState: RootState =
         defaultState

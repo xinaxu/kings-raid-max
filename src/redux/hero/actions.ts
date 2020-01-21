@@ -1,8 +1,9 @@
 import { HeroClassType } from "../../model/hero-class-type";
 import { Status } from "../../model/status";import {
   AllCalculationActions,
-  CalculationState,
-  HeroSelection
+  CalculationState, CHANGE_HERO_ARTIFACT,
+  HeroSelection,
+  HeroArtifactAction
 } from "./types";
 
 import {
@@ -49,6 +50,7 @@ import {
   ChangeBattleTypeAction,
   ChangeHeroSelectionAction
 } from "./types";
+import {ArtifactName} from "../../model/artifact";
 
 export function changeHeroOwnership(
   name: HeroName,
@@ -253,6 +255,19 @@ export function changeHeroGearSets(
       value: value
     }
   };
+}
+
+export function changeHeroArtifact(
+    name: HeroName,
+    artifact: ArtifactName | null
+): HeroArtifactAction {
+  return {
+    type: CHANGE_HERO_ARTIFACT,
+    payload: {
+      name: name,
+      value: artifact
+    }
+  }
 }
 
 export function changeBattleType(

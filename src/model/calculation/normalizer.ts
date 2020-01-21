@@ -1,5 +1,5 @@
 ﻿import {Status} from "../status";
-import {BattleCalculation} from "./types";
+import {BattleCalculation, UnitCalculation} from "./types";
 import {Effect, EffectType} from "../effect";
 
 type StatusCap = {
@@ -226,82 +226,36 @@ function _actualStat(statType: StatusCap, istat: number): number {
     return actual
 }
 
-function actualStat(statType: Status, istat: number): number {
+export function normalize(unit: UnitCalculation, statType: Status): number {
     switch (statType) {
         case Status.Crit:
-            return _actualStat(StatusCapMap[Status.Crit], istat * 10);
+            return _actualStat(StatusCapMap[Status.Crit], unit.finalStats[statType]! * 10);
         case Status.Acc:
-            return _actualStat(StatusCapMap[Status.Acc], istat * 10);
+            return _actualStat(StatusCapMap[Status.Acc], unit.finalStats[statType]! * 10);
         case Status.CCAcc:
-            return _actualStat(StatusCapMap[Status.CCAcc], istat * 10);
+            return _actualStat(StatusCapMap[Status.CCAcc], unit.finalStats[statType]! * 10);
         case Status.CritResistance:
-            return _actualStat(StatusCapMap[Status.CritResistance], istat * 10);
+            return _actualStat(StatusCapMap[Status.CritResistance], unit.finalStats[statType]! * 10);
         case Status.CCResistance:
-            return _actualStat(StatusCapMap[Status.CCResistance], istat * 10);
+            return _actualStat(StatusCapMap[Status.CCResistance], unit.finalStats[statType]! * 10);
         case Status.PDodge:
         case Status.MDodge:
         case Status.PBlock:
         case Status.MBlock:
         case Status.Lifesteal:
-            return _actualStat(StatusCapMap[Status.Dodge], istat * 10);
+            return _actualStat(StatusCapMap[Status.Dodge], unit.finalStats[statType]! * 10);
         case Status.Pen:
         case Status.PTough:
         case Status.MTough:
-            return _actualStat(StatusCapMap[Status.Pen], istat * 10);
+            return _actualStat(StatusCapMap[Status.Pen], unit.finalStats[statType]! * 10);
         case Status.AtkSpd:
-            return _actualStat(StatusCapMap[Status.AtkSpd], istat * 10);
+            return _actualStat(StatusCapMap[Status.AtkSpd], unit.finalStats[statType]! * 10);
         case Status.PBlockDef:
         case Status.MBlockDef:
-            return _actualStat(StatusCapMap[Status.BlockDef], istat * 10);
+            return _actualStat(StatusCapMap[Status.BlockDef], unit.finalStats[statType]! * 10);
         case Status.ManaPerAttack:
-            return _actualStat(StatusCapMap[Status.ManaPerAttack], istat * 10);
+            return _actualStat(StatusCapMap[Status.ManaPerAttack], unit.finalStats[statType]! * 10);
     }
     
-    return istat;
-}
-
-export function normalize(battle: BattleCalculation) {
-    battle.heroes.forEach(hero => {
-        if (hero !== undefined) {
-            for(let s in hero.stats) {
-                let status = (s as Status);
-                switch (status) {
-                    case Status.Def:
-                        hero.stats[Status.PDef]! += hero.stats[Status.Def]!;
-                        hero.stats[Status.MDef]! += hero.stats[Status.Def]!;
-                        break;
-                    case Status.Dodge:
-                        hero.stats[Status.PDodge]! += hero.stats[Status.Dodge]!;
-                        hero.stats[Status.MDodge]! += hero.stats[Status.Dodge]!;
-                        break;
-                    case Status.Block:
-                        hero.stats[Status.PBlock]! += hero.stats[Status.Block]!;
-                        hero.stats[Status.MBlock]! += hero.stats[Status.Block]!;
-                        break;
-                    case Status.BlockDef:
-                        hero.stats[Status.PBlockDef]! += hero.stats[Status.BlockDef]!;
-                        hero.stats[Status.MBlockDef]! += hero.stats[Status.BlockDef]!;
-                        break;
-                    case Status.Tough:
-                        hero.stats[Status.PTough]! += hero.stats[Status.Tough]!;
-                        hero.stats[Status.MTough]! += hero.stats[Status.Tough]!;
-                        break;
-                    case Status.Weakness:
-                        hero.stats[Status.PWeakness]! += hero.stats[Status.Weakness]!;
-                        hero.stats[Status.MWeakness]! += hero.stats[Status.Weakness]!;
-                        break;
-                    case Status.CritResistance:
-                        hero.stats[Status.PCritResistance]! += hero.stats[Status.CritResistance]!;
-                        hero.stats[Status.MCritResistance]! += hero.stats[Status.CritResistance]!;
-                        break;
-                    case Status.Dps:
-                        hero.stats[Status.PDps]! += hero.stats[Status.Dps]!;
-                        hero.stats[Status.MDps]! += hero.stats[Status.Dps]!;
-                        break;
-                    default:
-                        hero.stats[status] = actualStat(status, hero.stats[status]!);
-                }
-            }
-        }
-    });
+    return unit.finalStats[statType]!;
 }

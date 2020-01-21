@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@uifabric/react-cards": "^0.109.2",
+    "assert": "^2.0.0",
     "office-ui-fabric-react": "^7.77.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

@@ -14,7 +14,7 @@ import {
     changeHeroUwRunes,
     changeHeroArmorRunes,
     changeHeroEnchants,
-    changeHeroGearSets
+    changeHeroGearSets, changeHeroArtifact
 } from "../redux/hero/actions";
 import {connect} from "react-redux";
 import {HeroName, HeroClassMapping, SkillTranscendence, Accessory, GearSet} from "../model/hero";
@@ -31,6 +31,7 @@ import {
 import {Card} from "@uifabric/react-cards";
 import {StarLevel} from "../model/star-effect";
 import {Status} from "../model/status";
+import { ArtifactName } from "../model/artifact";
 
 const mapStateToProps = (state: RootState) => {
     return {
@@ -53,7 +54,8 @@ const mapActionToProps = {
     changeHeroUwRunes: changeHeroUwRunes,
     changeHeroArmorRunes: changeHeroArmorRunes,
     changeHeroEnchants: changeHeroEnchants,
-    changeHeroGearSets: changeHeroGearSets
+    changeHeroGearSets: changeHeroGearSets,
+    changeHeroArtifact: changeHeroArtifact
 };
 
 export type HeroConfigurationProps = typeof mapActionToProps &
@@ -87,6 +89,10 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
     }
 
     render() {
+        let artifactOption = Object.values(ArtifactName).map(name => {
+            return {key: name as string, text: name as string};
+        });
+        artifactOption.unshift({key: 'None', text: 'None'});
         return (
             <div>
                 <Pivot linkFormat={PivotLinkFormat.tabs} linkSize={PivotLinkSize.large} onLinkClick={this.onLinkClick}
@@ -458,6 +464,25 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                                     />
                                                 );
                                             })}
+                                        </Card.Item>
+                                    </Card>
+                                    <Card>
+                                        <Card.Item>
+                                            <Text variant={"xLarge"}>
+                                                Artifact
+                                            </Text>
+                                        </Card.Item>
+                                        <Card.Item fill>
+                                            <Dropdown 
+                                                      label={"Choose equipped artifact"}
+                                                      selectedKey={this.props.heroConfiguration[heroName]?.artifact === null ? 'None' : this.props.heroConfiguration[heroName]?.artifact}
+                                                      options={artifactOption}
+                                                      onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
+                                                          if (option !== undefined) {
+                                                              this.props.changeHeroArtifact(heroName, option.key === 'None' ? null : (option.key as ArtifactName));
+                                                          }
+                                                      }}
+                                            />
                                         </Card.Item>
                                     </Card>
                                     <Card>

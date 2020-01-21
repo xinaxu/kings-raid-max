@@ -2,6 +2,7 @@ import {HeroClassType} from "./hero-class-type";
 import {Effect} from "./effect";
 import {StarEffectGroup, StarLevel} from "./star-effect";
 import {Status} from "./status";
+import {ArtifactName} from "./artifact";
 
 export enum HeroName {
     // Knight
@@ -105,7 +106,6 @@ export enum HeroName {
 }
 
 export type HeroSkill = {
-    name: string;
     light: Effect[];
     dark: Effect[];
 };
@@ -127,23 +127,21 @@ export type HeroInfo = {
     sw: [Effect[], Effect[], Effect[]];
 };
 
-export const HeroInfos: Partial<Record<HeroName, HeroInfo>> = {
-    [HeroName.Phillop]: {
-        heroClass: HeroClassType.Knight,
-        damageType: DamageType.Physical,
-        name: HeroName.Phillop,
-        skills: [{name: "1st skill", light: [], dark: []}, {name: "1st skill", light: [], dark: []}, {
-            name: "1st skill",
-            light: [],
-            dark: []
-        }, {name: "1st skill", light: [], dark: []}],
-        t5Light: [],
-        t5Dark: [],
-        uw: new StarEffectGroup(),
-        ut: [new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup()],
-        sw: [[], [], []]
-    }
-}
+export let HeroInfos: Partial<Record<HeroName, HeroInfo>> = {};
+HeroInfos.Phillop = {
+    heroClass: HeroClassType.Knight,
+    damageType: DamageType.Physical,
+    name: HeroName.Phillop,
+    skills: [{light: [], dark: []}, {light: [], dark: []}, {
+        light: [],
+        dark: []
+    }, {light: [], dark: []}],
+    t5Light: [],
+    t5Dark: [],
+    uw: new StarEffectGroup(),
+    ut: [new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup()],
+    sw: [[], [], []]
+};
 
 export enum SkillTranscendence {
     Neither = "Neither",
@@ -168,14 +166,14 @@ export enum Accessory {
 }
 
 export const HeroClassMapping: Record<HeroClassType, HeroName[]> = {
-    Knight: [HeroName.Phillop, HeroName.Clause, HeroName.Aselica, HeroName.Demia, HeroName.Dosarta, HeroName.Glenwys, HeroName.Jane, HeroName.Loman, HeroName.Morrah, HeroName.Neraxis, HeroName.Ricardo, HeroName.Sonia],
-    Warrior: [HeroName.Bernheim, HeroName.Chase, HeroName.Gau, HeroName.Kasel, HeroName.Kirze, HeroName.Naila, HeroName.Nicky, HeroName.Priscilla, HeroName.Scarlet, HeroName.Seria, HeroName.Theo, HeroName.Viska],
-    Assassin: [HeroName.Epis, HeroName.Erze, HeroName.Ezekiel, HeroName.Fluss, HeroName.Gladi, HeroName.Laudia, HeroName.Mirianne, HeroName.Nia, HeroName.Reina, HeroName.Roi, HeroName.Tanya],
-    Archer: [HeroName.Arch, HeroName.Dimael, HeroName.Luna, HeroName.Requina, HeroName.Selene, HeroName.Shamilla, HeroName.Yanne, HeroName.Yuria, HeroName.Zafir],
-    Mechanic: [HeroName.Cecilia, HeroName.Annette, HeroName.Chrisha, HeroName.Crow, HeroName.Hanus, HeroName.Kara, HeroName.Lakrak, HeroName.Miruru, HeroName.Mitra, HeroName.Oddy, HeroName.Rodina],
-    Wizard: [HeroName.Aisha, HeroName.Artemia, HeroName.Cleo, HeroName.Dakaris, HeroName.Esker, HeroName.Lewisia, HeroName.Lilia, HeroName.Lorraine, HeroName.Maria, HeroName.Nyx, HeroName.Ophelia, HeroName.Pavel, HeroName.Veronica],
-    Priest: [HeroName.Baudouin, HeroName.Cassandra, HeroName.Frey, HeroName.Juno, HeroName.Kaulah, HeroName.Laias, HeroName.Lavril, HeroName.Leo, HeroName.Lucias, HeroName.May, HeroName.Mediana, HeroName.Rephy, HeroName.Shea],
-}
+    Knight: Object.keys(HeroInfos).filter(name => HeroInfos[name as HeroName]!.heroClass === HeroClassType.Knight) as HeroName[],
+    Warrior: Object.keys(HeroInfos).filter(name => HeroInfos[name as HeroName]!.heroClass === HeroClassType.Warrior) as HeroName[],
+    Assassin: Object.keys(HeroInfos).filter(name => HeroInfos[name as HeroName]!.heroClass === HeroClassType.Assassin) as HeroName[],
+    Archer: Object.keys(HeroInfos).filter(name => HeroInfos[name as HeroName]!.heroClass === HeroClassType.Archer) as HeroName[],
+    Mechanic: Object.keys(HeroInfos).filter(name => HeroInfos[name as HeroName]!.heroClass === HeroClassType.Mechanic) as HeroName[],
+    Wizard: Object.keys(HeroInfos).filter(name => HeroInfos[name as HeroName]!.heroClass === HeroClassType.Wizard) as HeroName[],
+    Priest: Object.keys(HeroInfos).filter(name => HeroInfos[name as HeroName]!.heroClass === HeroClassType.Priest) as HeroName[],
+};
 
 export type HeroConfiguration = {
     owned: boolean
@@ -222,4 +220,5 @@ export type HeroConfiguration = {
     armorRunes: [Status | null, Status | null];
     enchants: [Status | null, Status | null, Status | null, Status | null]
     gearSets: [GearSet, GearSet]
+    artifact: ArtifactName | null
 };

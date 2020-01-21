@@ -1,4 +1,9 @@
 export enum Status {
+  FlatAtk = "Attack Value",
+  FlatDef = "Defence Value",
+  FlatPDef = "Physical Defence Value",
+  FlatMDef = "Magic Defence Value",
+  FlatHp = "HP Value",
   Atk = "Attack",
   Def = "Defence",
   PDef = "Physical Defence",
