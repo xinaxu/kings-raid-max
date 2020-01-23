@@ -30,8 +30,16 @@ import {
 } from "office-ui-fabric-react";
 import {Card} from "@uifabric/react-cards";
 import {StarLevel} from "../model/star-effect";
-import {Status} from "../model/status";
-import { ArtifactName } from "../model/artifact";
+import {
+    Status,
+    GearLineOptions,
+    UniqueTreasureGearLineOptions,
+    GearEnchantmentOptions,
+    UwRuneOptions,
+    Armor1RuneOptions,
+    Armor2RuneOptions
+} from "../model/status";
+import {ArtifactName} from "../model/artifact";
 
 const mapStateToProps = (state: RootState) => {
     return {
@@ -281,6 +289,21 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                                         ]}
                                                     />
                                                 </Card.Item>
+                                                <Card.Item fill>
+                                                    {[1, 2].map(i => {
+                                                        return (
+                                                            <Dropdown key={i}
+                                                                      selectedKey={this.props.heroConfiguration[heroName]?.utGearLines[ut - 1][i - 1]}
+                                                                      options={UniqueTreasureGearLineOptions.map(status => {
+                                                                          return {key: status, text: status};
+                                                                      })}
+                                                                      onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
+                                                                          this.props.changeHeroUtGearLine(heroName, ut as 1 | 2 | 3 | 4, i as 1 | 2, option!.key as Status);
+                                                                      }}
+                                                            />
+                                                        );
+                                                    })}
+                                                </Card.Item>
                                             </Card>
                                         );
                                     })}
@@ -326,33 +349,6 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                             />
                                         </Card.Item>
                                     </Card>
-                                    {[1, 2, 3, 4].map(ut => {
-                                        return (
-                                            <Card>
-                                                <Card.Item>
-                                                    <Text variant={"xLarge"}>
-                                                        Unique Treasure #{ut} Gear line
-                                                    </Text>
-                                                </Card.Item>
-                                                <Card.Item fill>
-                                                    {[1, 2].map(i => {
-                                                        return (
-                                                            <Dropdown key={i}
-                                                                      label={`Gear Line # ${i}`}
-                                                                      selectedKey={this.props.heroConfiguration[heroName]?.utGearLines[ut - 1][i - 1]}
-                                                                      options={Object.values(Status).map(status => {
-                                                                          return {key: status, text: status};
-                                                                      })}
-                                                                      onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
-                                                                          this.props.changeHeroUtGearLine(heroName, ut as 1 | 2 | 3 | 4, i as 1 | 2, option!.key as Status);
-                                                                      }}
-                                                            />
-                                                        );
-                                                    })}
-                                                </Card.Item>
-                                            </Card>
-                                        );
-                                    })}
                                     <Card>
                                         <Card.Item>
                                             <Text variant={"xLarge"}>
@@ -387,7 +383,7 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                                             this.props.heroConfiguration[heroName]?.gearSets[i - 1]
                                                         }
                                                         onChange={(ev?: React.FormEvent<HTMLElement | HTMLInputElement>, option?: IChoiceGroupOption) => {
-                                                            this.props.changeHeroGearSets(heroName, 1, option!.key as GearSet);
+                                                            this.props.changeHeroGearSets(heroName, i as 1|2, option!.key as GearSet);
                                                         }}
                                                         options={Object.values(GearSet).map(gearSet => {
                                                             return {key: gearSet, text: gearSet};
@@ -409,7 +405,7 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                                     <Dropdown key={i}
                                                               label={`Rune # ${i}`}
                                                               selectedKey={this.props.heroConfiguration[heroName]?.uwRunes[i - 1]}
-                                                              options={Object.values(Status).map(status => {
+                                                              options={UwRuneOptions.map(status => {
                                                                   return {key: status, text: status};
                                                               })}
                                                               onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
@@ -427,20 +423,24 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                             </Text>
                                         </Card.Item>
                                         <Card.Item fill>
-                                            {[1, 2].map(i => {
-                                                return (
-                                                    <Dropdown key={i}
-                                                              label={`Armor Rune # ${i}`}
-                                                              selectedKey={this.props.heroConfiguration[heroName]?.armorRunes[i - 1]}
-                                                              options={Object.values(Status).map(status => {
-                                                                  return {key: status, text: status};
-                                                              })}
-                                                              onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
-                                                                  this.props.changeHeroArmorRunes(heroName, i as 1 | 2, option!.key as Status);
-                                                              }}
-                                                    />
-                                                );
-                                            })}
+                                            <Dropdown label={`Armor Rune # 1`}
+                                                      selectedKey={this.props.heroConfiguration[heroName]?.armorRunes[0]}
+                                                      options={Armor1RuneOptions.map(status => {
+                                                          return {key: status, text: status};
+                                                      })}
+                                                      onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
+                                                          this.props.changeHeroArmorRunes(heroName,1, option!.key as Status);
+                                                      }}
+                                            />
+                                            <Dropdown  label={`Armor Rune # 2`}
+                                                      selectedKey={this.props.heroConfiguration[heroName]?.armorRunes[1]}
+                                                      options={Armor2RuneOptions.map(status => {
+                                                          return {key: status, text: status};
+                                                      })}
+                                                      onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
+                                                          this.props.changeHeroArmorRunes(heroName, 2, option!.key as Status);
+                                                      }}
+                                            />
                                         </Card.Item>
                                     </Card>
                                     <Card>
@@ -455,7 +455,7 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                                     <Dropdown key={i}
                                                               label={`Enchantment # ${i}`}
                                                               selectedKey={this.props.heroConfiguration[heroName]?.enchants[i - 1]}
-                                                              options={Object.values(Status).map(status => {
+                                                              options={GearEnchantmentOptions.map(status => {
                                                                   return {key: status, text: status};
                                                               })}
                                                               onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
@@ -473,15 +473,15 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                             </Text>
                                         </Card.Item>
                                         <Card.Item fill>
-                                            <Dropdown 
-                                                      label={"Choose equipped artifact"}
-                                                      selectedKey={this.props.heroConfiguration[heroName]?.artifact === null ? 'None' : this.props.heroConfiguration[heroName]?.artifact}
-                                                      options={artifactOption}
-                                                      onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
-                                                          if (option !== undefined) {
-                                                              this.props.changeHeroArtifact(heroName, option.key === 'None' ? null : (option.key as ArtifactName));
-                                                          }
-                                                      }}
+                                            <Dropdown
+                                                label={"Choose equipped artifact"}
+                                                selectedKey={this.props.heroConfiguration[heroName]?.artifact === null ? 'None' : this.props.heroConfiguration[heroName]?.artifact}
+                                                options={artifactOption}
+                                                onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
+                                                    if (option !== undefined) {
+                                                        this.props.changeHeroArtifact(heroName, option.key === 'None' ? null : (option.key as ArtifactName));
+                                                    }
+                                                }}
                                             />
                                         </Card.Item>
                                     </Card>
@@ -492,16 +492,15 @@ class HeroConfiguration extends React.Component<HeroConfigurationProps,
                                             </Text>
                                         </Card.Item>
                                         <Card.Item fill>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => {
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(i => {
                                                 return (
                                                     <Dropdown key={i}
-                                                              label={`Gear Line # ${i}`}
                                                               selectedKey={this.props.heroConfiguration[heroName]?.gearLines[i - 1]}
-                                                              options={Object.values(Status).map(status => {
+                                                              options={GearLineOptions.map(status => {
                                                                   return {key: status, text: status};
                                                               })}
                                                               onChange={(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
-                                                                  this.props.changeHeroGearLine(heroName, i as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12, option!.key as Status);
+                                                                  this.props.changeHeroGearLine(heroName, i as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16, option!.key as Status);
                                                               }}
                                                     />
                                                 );

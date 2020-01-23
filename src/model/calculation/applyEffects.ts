@@ -10,10 +10,14 @@ function updateFinalStats(battle: BattleCalculation) {
             });
             
             hero.finalStats[Status.FlatAtk] = hero.basicStats[Status.FlatAtk]! * (1 + hero.basicStats[Status.Atk]! / 100) * (1 + hero.buffs[Status.Atk]! / 100) + hero.buffs[Status.FlatAtk]!;
+            hero.finalStats[Status.Atk] = 0;
             hero.finalStats[Status.FlatHp] = hero.basicStats[Status.FlatHp]! * (1 + hero.basicStats[Status.Hp]! / 100)* (1 + hero.buffs[Status.Hp]! / 100) + hero.buffs[Status.FlatHp]!;
+            hero.finalStats[Status.Hp] = 0;
             hero.finalStats[Status.FlatPDef] = (hero.basicStats[Status.FlatPDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.PDef]! / 100 + hero.basicStats[Status.Def]! / 100) * (1 + hero.buffs[Status.PDef]! / 100 + hero.buffs[Status.Def]! / 100) + hero.buffs[Status.FlatPDef]! + hero.buffs[Status.FlatDef]!;
             hero.finalStats[Status.FlatMDef] = (hero.basicStats[Status.FlatMDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.MDef]! / 100 + hero.basicStats[Status.Def]! / 100) * (1 + hero.buffs[Status.MDef]! / 100 + hero.buffs[Status.Def]! / 100) + hero.buffs[Status.FlatMDef]! + hero.buffs[Status.FlatDef]!;
             hero.finalStats[Status.FlatDef] = 0;
+            hero.finalStats[Status.PDef] = 0;
+            hero.finalStats[Status.MDef] = 0;
             hero.finalStats[Status.PDodge] = hero.finalStats[Status.PDodge]! + hero.finalStats[Status.Dodge]!;
             hero.finalStats[Status.MDodge] = hero.finalStats[Status.MDodge]! + hero.finalStats[Status.Dodge]!;
             hero.finalStats[Status.Dodge] = 0;
@@ -66,13 +70,6 @@ export function applyEffects(battle: BattleCalculation) {
             hero.effects.filter(effect => effect.type === EffectType.BasicStatus).forEach(effect => {
                 hero.basicStats[effect.status]! += effect.value;
             });
-
-            // Update HP, Atk, MDef, PDef
-            hero.basicStats[Status.FlatAtk] = hero.basicStats[Status.FlatAtk]! * (1 + hero.basicStats[Status.Atk]! / 100);
-            hero.basicStats[Status.FlatHp] = hero.basicStats[Status.FlatHp]! * (1 + hero.basicStats[Status.Hp]! / 100);
-            hero.basicStats[Status.FlatPDef] = (hero.basicStats[Status.FlatPDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.PDef]! / 100 + hero.basicStats[Status.Def]! / 100);
-            hero.basicStats[Status.FlatMDef] = (hero.basicStats[Status.FlatMDef]! + hero.basicStats[Status.FlatDef]!) * (1 + hero.basicStats[Status.MDef]! / 100 + hero.basicStats[Status.Def]! / 100);
-            hero.basicStats[Status.FlatDef] = 0;
         }
     });
 

@@ -138,7 +138,7 @@ class Calculation extends React.Component<CalculationProps> {
                                                     return (
                                                         <div key={value[0]}>
                                                             <Label>{value[0]}:</Label>
-                                                            {value[1].toLocaleString()}
+                                                            {Math.round(value[1] as number).toLocaleString()}
                                                         </div>
                                                     );
                                                 })}

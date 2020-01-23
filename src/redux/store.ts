@@ -40,13 +40,13 @@ const defaultState: RootState = {
     },
 };
 
-const initialState: RootState =
-        defaultState
-
 // const initialState: RootState =
-//     initialSession === null
-//         ? defaultState
-//         : JSON.parse(initialSession);
+//         defaultState
+
+const initialState: RootState =
+    initialSession === null
+        ? defaultState
+        : JSON.parse(initialSession);
 
 declare global {
     interface Window {

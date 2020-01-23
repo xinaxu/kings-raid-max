@@ -1,6 +1,6 @@
 import {HeroClassType} from "./hero-class-type";
-import {Effect} from "./effect";
-import {StarEffectGroup, StarLevel} from "./star-effect";
+import {Effect, EffectDestination, EffectMultiplierType, EffectType} from "./effect";
+import {StarEffectGroup, StarLevel, createStarEffect} from "./star-effect";
 import {Status} from "./status";
 import {ArtifactName} from "./artifact";
 
@@ -106,8 +106,10 @@ export enum HeroName {
 }
 
 export type HeroSkill = {
+    neither: Effect[];
     light: Effect[];
     dark: Effect[];
+    override?: boolean
 };
 
 export enum DamageType {
@@ -128,25 +130,123 @@ export type HeroInfo = {
 };
 
 export let HeroInfos: Partial<Record<HeroName, HeroInfo>> = {};
-HeroInfos.Phillop = {
-    heroClass: HeroClassType.Knight,
-    damageType: DamageType.Physical,
-    name: HeroName.Phillop,
-    skills: [{light: [], dark: []}, {light: [], dark: []}, {
-        light: [],
-        dark: []
-    }, {light: [], dark: []}],
-    t5Light: [],
-    t5Dark: [],
-    uw: new StarEffectGroup(),
-    ut: [new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup(), new StarEffectGroup()],
+HeroInfos.Laudia = {
+    heroClass: HeroClassType.Assassin,
+    damageType: DamageType.Magic,
+    name: HeroName.Laudia,
+    skills: [
+        {
+            neither: [
+                new Effect(EffectType.Cc).with({destination: EffectDestination.SingleEnemy, coolDown: 8, duration: 3}),
+            ], light: [], dark: [
+                new Effect(EffectType.StatusChange).with({
+                    destination: EffectDestination.SingleEnemy,
+                    status: Status.MWeakness,
+                    value: 25,
+                    coolDown: 8,
+                    duration: 10
+                }),
+            ]
+        },
+        {
+            neither: [
+                // Given this skill is always used before using skill 3
+                new Effect(EffectType.StatusChange).with({
+                    status: Status.FlatAtk,
+                    value: 25288 * 1.5,
+                    coolDown: 10,
+                    duration: 10
+                }),
+                new Effect(EffectType.StatusChange).with({
+                    status: Status.CritDmg,
+                    value: 70,
+                    coolDown: 10,
+                    duration: 10
+                }),
+            ], light: [], dark: []
+        }, {neither: [], light: [], dark: []},
+        {
+            neither: [
+                new Effect(EffectType.StatusChange).with({
+                    status: Status.Pen,
+                    value: 3 * 1.5 * 10,
+                    _dispellable: false
+                }),
+                new Effect(EffectType.StatusChange).with({
+                    status: Status.FlatDef,
+                    value: 1680 * 1.5 * 10,
+                    _dispellable: false
+                }),
+            ], light: [], dark: [
+                new Effect(EffectType.StatusChange).with({status: Status.Tough, value: 2 * 10, _dispellable: false}),
+            ]
+        }],
+    t5Light: [
+        new Effect(EffectType.StatusChange).with({status: Status.Atk, value: 15}),
+        new Effect(EffectType.StatusChange).with({status: Status.Def, value: 15}),
+        new Effect(EffectType.StatusChange).with({status: Status.Hp, value: 15}),
+        new Effect(EffectType.StatusChange).with({status: Status.AtkSpd, value: 10}),
+    ],
+    t5Dark: [
+        new Effect(EffectType.StatusChange).with({status: Status.Acc, value: 30, duration: 10, ending: 10}),
+        new Effect(EffectType.StatusChange).with({status: Status.CCAcc, value: 30, duration: 10, ending: 10}),
+        new Effect(EffectType.CcImmunity).with({duration: 7, ending: 7}),
+    ],
+    uw: new StarEffectGroup(
+        createStarEffect(new Effect(EffectType.StatusChange).with({
+            status: Status.Pen,
+            value: 3 * 1.5 * 4,
+            _dispellable: false
+        }), {
+            values: [3 * 1.5 * 4, 3 * 1.5 * 5, 3 * 1.5 * 6, 3 * 1.5 * 7, 3 * 1.5 * 8, 3 * 1.5 * 10]
+        }),
+        createStarEffect(new Effect(EffectType.StatusChange).with({
+            status: Status.FlatDef,
+            value: 3 * 1.5 * 4,
+            _dispellable: false
+        }), {
+            values: [1680 * 1.5 * 4, 1680 * 1.5 * 5, 1680 * 1.5 * 6, 1680 * 1.5 * 7, 1680 * 1.5 * 8, 1680 * 1.5 * 10]
+        }),
+        // Assume taking S4 dark
+        createStarEffect(new Effect(EffectType.StatusChange).with({
+            status: Status.Tough,
+            value: 2 * 4,
+            _dispellable: false
+        }), {
+            values: [2 * 4, 2 * 5, 2 * 6, 2 * 7, 2 * 8, 2 * 10]
+        })
+    ),
+    ut: [new StarEffectGroup(), new StarEffectGroup(),
+        new StarEffectGroup(
+            createStarEffect(new Effect(EffectType.StatusChange).with({
+                status: Status.Pen,
+                value: 10,
+                _dispellable: true
+            }), {
+                values: [10, 12, 14, 17, 21, 25]
+            })
+        ),
+        new StarEffectGroup(
+            createStarEffect(new Effect(EffectType.StatusChange).with({
+                status: Status.AtkSpd,
+                value: 10,
+                _dispellable: true
+            }), {
+                values: [10, 12, 14, 17, 21, 25]
+            }),
+            createStarEffect(new Effect(EffectType.StatusChange).with({
+                status: Status.FlatDef,
+                value: 1680 * 20 * 0.5,
+                _dispellable: false
+            }), {})
+        )],
     sw: [[], [], []]
 };
 
 export enum SkillTranscendence {
-    Neither = "Neither",
-    Light = "Light",
-    Dark = "Dark"
+    Neither = "neither",
+    Light = "light",
+    Dark = "dark"
 }
 
 export enum GearSet {
@@ -195,6 +295,10 @@ export type HeroConfiguration = {
     ];
     utPrimary: 1 | 2 | 3 | 4 | null;
     gearLines: [
+        Status,
+        Status,
+        Status,
+        Status,
         Status,
         Status,
         Status,

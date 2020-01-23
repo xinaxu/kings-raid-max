@@ -34,6 +34,10 @@ import {calculateDps} from "../../model/calculation/calculateDps";
 import {calculateTankiness} from "../../model/calculation/calculateTankiness";
 import {updateBasic} from "../../model/calculation/basicStatus";
 import {updateTreasure} from "../../model/calculation/treasure";
+import {updateGearLine} from "../../model/calculation/gearLine";
+import {updateEnchants} from "../../model/calculation/enchantment";
+import {updateRunes} from "../../model/calculation/rune";
+import {updateGearSet} from "../../model/calculation/gearSet";
 
 export function calculationReducer(
     state: {
@@ -162,6 +166,10 @@ function reCalculate(state: HeroCombinedState): CalculationState {
     updateArmor(battle);
     updateWeapon(battle);
     updateTreasure(battle);
+    updateGearLine(battle);
+    updateEnchants(battle);
+    updateRunes(battle);
+    updateGearSet(battle);
     applyEffects(battle);
     calculateDps(battle);
     calculateTankiness(battle);
@@ -189,6 +197,10 @@ function copyHeroConfigurationState(
             utLevel: [null, null, null, null],
             utPrimary: null,
             gearLines: [
+                Status.Atk,
+                Status.Atk,
+                Status.Atk,
+                Status.Atk,
                 Status.Atk,
                 Status.Atk,
                 Status.Atk,
