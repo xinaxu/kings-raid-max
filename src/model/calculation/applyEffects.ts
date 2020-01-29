@@ -1,6 +1,7 @@
 ﻿import {BattleCalculation} from "./types";
 import {EffectDestination, EffectType} from "../effect";
 import {Status} from "../status";
+import { normalize } from "./normalizer";
 
 function updateFinalStats(battle: BattleCalculation) {
     battle.heroes.forEach(hero => {
@@ -8,8 +9,8 @@ function updateFinalStats(battle: BattleCalculation) {
             Object.values(Status).forEach(status => {
                 hero.finalStats[status] = hero.basicStats[status]! + hero.buffs[status]!;
             });
-            
-            hero.finalStats[Status.FlatAtk] = hero.basicStats[Status.FlatAtk]! * (1 + hero.basicStats[Status.Atk]! / 100) * (1 + hero.buffs[Status.Atk]! / 100) + hero.buffs[Status.FlatAtk]!;
+            hero.finalStats[Status.Atk] = hero.buffs[Status.Atk];
+            hero.finalStats[Status.FlatAtk] = hero.basicStats[Status.FlatAtk]! * (1 + normalize(hero, Status.Atk) / 100) * (1 + hero.basicStats[Status.Atk]! / 100) + hero.buffs[Status.FlatAtk]!;
             hero.finalStats[Status.Atk] = 0;
             hero.finalStats[Status.FlatHp] = hero.basicStats[Status.FlatHp]! * (1 + hero.basicStats[Status.Hp]! / 100)* (1 + hero.buffs[Status.Hp]! / 100) + hero.buffs[Status.FlatHp]!;
             hero.finalStats[Status.Hp] = 0;

@@ -113,8 +113,6 @@ export function calculationReducer(
         default:
             return state;
     }
-
-    return state;
 }
 
 function reCalculate(state: HeroCombinedState): CalculationState {

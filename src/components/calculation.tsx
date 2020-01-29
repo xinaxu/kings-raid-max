@@ -6,9 +6,8 @@ import {
     Dropdown,
     DropdownMenuItemType,
     IChoiceGroupOption,
-    IDropdownOption, Image, Label, PivotItem, Toggle,
-    Stack,
-    Text
+    IDropdownOption, Image, Label, Toggle,
+    Stack
 } from "office-ui-fabric-react";
 import {Card} from "@uifabric/react-cards";
 import {HeroClassMapping, HeroName} from "../model/hero";
@@ -32,10 +31,6 @@ export type CalculationProps = typeof mapActionToProps &
     ReturnType<typeof mapStateToProps>;
 
 class Calculation extends React.Component<CalculationProps> {
-    constructor(props: Readonly<CalculationProps>) {
-        super(props);
-    }
-
     render() {
         let options: IDropdownOption[] = [];
         for (let heroClass in HeroClassMapping) {

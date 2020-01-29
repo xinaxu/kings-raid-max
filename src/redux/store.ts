@@ -50,12 +50,12 @@ const initialState: RootState =
 
 declare global {
     interface Window {
-        devToolsExtension?: typeof compose;
+        __REDUX_DEVTOOLS_EXTENSION__?: typeof compose;
     }
 }
 
 export const store = createStore(
     allReducers,
     initialState,
-    window.devToolsExtension && window.devToolsExtension()
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
