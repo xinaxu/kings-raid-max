@@ -14,7 +14,7 @@ export enum EffectDestination {
   Self = "self",
   Allies = "allies",
   TopDps = "top dps",
-  SingleEnemy = "single enemry",
+  SingleEnemy = "single enemy",
   Enemies = "all enemies"
 }
 
@@ -79,8 +79,8 @@ export class Effect {
         descriptions.push(
           `${this.value! > 0 ? "increase" : "reduce"} ${this.destination} ${
             this.status
-          } by ${this.value! > 0 ? this.value! : -this.value!} ${
-            !this.status.includes("Value") ? " percentage" : ""
+          } by ${this.value! > 0 ? this.value! : -this.value!}${
+            !this.status.includes("Value") ? "%" : ""
           }` + (this.fromStatus !== undefined ? ` of ${this.fromStatus}` : "")
         );
 

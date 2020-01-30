@@ -2475,7 +2475,19 @@ HeroInfos.Laudia = {
           destination: EffectDestination.SingleEnemy,
           coolDown: 8,
           duration: 3
-        })
+        }),
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.SingleEnemy,
+          coolDown: 8,
+          duration: 8,
+          status: Status.Block, value: -50
+        }),
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.SingleEnemy,
+          coolDown: 8,
+          duration: 8,
+          status: Status.CritResistance, value: -50
+        }),
       ],
       light: [],
       dark: [
@@ -2622,7 +2634,7 @@ HeroInfos.Laudia = {
         new Effect(EffectType.StatusChange).with({
           status: Status.AtkSpd,
           value: 10,
-          _dispellable: true
+          coolDown: 5, duration: 5
         }),
         {
           values: [10, 12, 14, 17, 21, 25]
@@ -2736,5 +2748,5 @@ export type HeroConfiguration = {
   armorRunes: [Status | null, Status | null];
   enchants: [Status | null, Status | null, Status | null, Status | null];
   gearSets: [GearSet, GearSet];
-  artifact: ArtifactName | null;
+  artifact: [ArtifactName | null, 0|1|2|3|4|5];
 };

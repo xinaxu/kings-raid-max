@@ -37,7 +37,7 @@ export function updateBasic(battle: BattleCalculation) {
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatHp, value: 1233888}));
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatAtk, value: 21992}));
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatPDef, value: 6968}));
-                    hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatMDef, value: 6968}));
+                    hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatMDef, value: 6096}));
                     break;
                 case HeroClassType.Archer:
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.Crit, value: 15}));
@@ -52,7 +52,7 @@ export function updateBasic(battle: BattleCalculation) {
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.Crit, value: 15}));
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.CritDmg, value: 50}));
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.Pen, value: 10}));
-                    hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.Acc, value: 10}));
+                    hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.Acc, value: 20}));
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatHp, value: 1030920}));
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatAtk, value: 22648}));
                     hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatPDef, value: 4784}));

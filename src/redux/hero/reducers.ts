@@ -9,7 +9,8 @@ import {
     CHANGE_BATTLE_TYPE,
     CHANGE_HERO_ACCESSORY,
     CHANGE_HERO_ARMOR_RUNES,
-    CHANGE_HERO_ARTIFACT,
+    CHANGE_HERO_ARTIFACT_NAME,
+    CHANGE_HERO_ARTIFACT_LEVEL,
     CHANGE_HERO_ENCHANTS,
     CHANGE_HERO_GEARLINE,
     CHANGE_HERO_GEARSET,
@@ -24,7 +25,7 @@ import {
     CHANGE_HERO_UW_LEVEL,
     CHANGE_HERO_UW_RUNES,
     HeroConfigurationState,
-    HeroSelection
+    HeroSelection, CHANGE_HERO_T5
 } from "./types";
 import {updateArmor} from "../../model/calculation/armor";
 import {BattleCalculation} from "../../model/calculation/types";
@@ -38,6 +39,10 @@ import {updateGearLine} from "../../model/calculation/gearLine";
 import {updateEnchants} from "../../model/calculation/enchantment";
 import {updateRunes} from "../../model/calculation/rune";
 import {updateGearSet} from "../../model/calculation/gearSet";
+import {updateGearEffect} from "../../model/calculation/gearEffect";
+import {updateSkill} from "../../model/calculation/skill";
+import {updateArtifact} from "../../model/calculation/artifact";
+import {updateTranscendence} from "../../model/calculation/transcendence";
 
 export function calculationReducer(
     state: {
@@ -168,6 +173,10 @@ function reCalculate(state: HeroCombinedState): CalculationState {
     updateEnchants(battle);
     updateRunes(battle);
     updateGearSet(battle);
+    updateGearEffect(battle);
+    updateArtifact(battle);
+    updateTranscendence(battle);
+    updateSkill(battle);
     applyEffects(battle);
     calculateDps(battle);
     calculateTankiness(battle);
@@ -224,7 +233,7 @@ function copyHeroConfigurationState(
             armorRunes: [null, null],
             enchants: [null, null, null, null],
             gearSets: [GearSet.BlackDragon, GearSet.BlackDragon],
-            artifact: null
+            artifact: [null, 0]
         };
     }
 
@@ -314,16 +323,17 @@ function heroConfigurationReducer(
             newState[action.payload.name]!.gearSets[action.payload.id - 1] =
                 action.payload.value;
             break;
-        case CHANGE_HERO_ARTIFACT:
+        case CHANGE_HERO_ARTIFACT_NAME:
             newState = copyHeroConfigurationState(state, action.payload.name);
-            Object.values(HeroName).forEach(heroName => {
-                if (newState[heroName] !== undefined) {
-                    if (newState[heroName]!.artifact === action.payload.value) {
-                        newState[heroName]!.artifact = null;
-                    }
-                }
-            });
-            newState[action.payload.name]!.artifact = action.payload.value;
+            newState[action.payload.name]!.artifact[0] = action.payload.value;
+            break;
+        case CHANGE_HERO_ARTIFACT_LEVEL:
+            newState = copyHeroConfigurationState(state, action.payload.name);
+            newState[action.payload.name]!.artifact[1] = action.payload.value;
+            break;
+        case CHANGE_HERO_T5:
+            newState = copyHeroConfigurationState(state, action.payload.name);
+            newState[action.payload.name]!.t5[action.payload.id] = action.payload.value;
             break;
         default:
             return state;

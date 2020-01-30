@@ -29,6 +29,7 @@ export function updateArmor(battle: BattleCalculation) {
     if (hero !== undefined) {
       hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatPDef, value: pArmorValues[hero.heroInfo.heroClass]}));
       hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatMDef, value: mArmorValues[hero.heroInfo.heroClass]}));
+      hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatHp, value: 1089487}));
       switch (hero.heroConfiguration.accessory) {
         case Accessory.Ring:
           hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatHp, value: 1089487}));
@@ -37,10 +38,10 @@ export function updateArmor(battle: BattleCalculation) {
           hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatAtk, value: 23702}));
           break;
         case Accessory.Bracelet:
-          hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatPDef, value: 11369}));
+          hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatPDef, value: 22739}));
           break;
         case Accessory.Necklace:
-          hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatMDef, value: 11369}));
+          hero.effects.push(new Effect(EffectType.BasicStatus).with({status: Status.FlatMDef, value: 22739}));
           break;
       }
     }

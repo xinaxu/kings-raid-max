@@ -1,5 +1,5 @@
 ﻿import {BattleCalculation} from "./types";
-import {Effect, EffectType} from "../effect";
+import {Effect, EffectDestination, EffectType} from "../effect";
 import {Status} from "../status";
 import {GearSet} from "../hero";
 
@@ -15,7 +15,7 @@ export function updateGearSet(battle: BattleCalculation) {
                         hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.Crit, value: 23, _dispellable: false}));
                         break;
                     case  GearSet.DarkLegion:
-                        hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.Crit, value: 13, _dispellable: false}));
+                        hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.CritDmg, value: 13, _dispellable: false, destination: EffectDestination.Allies}));
                         break;
                     case  GearSet.Lava:
                         hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.CritDmg, value: 46, _dispellable: false}));
@@ -39,7 +39,7 @@ export function updateGearSet(battle: BattleCalculation) {
                             hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.Crit, value: 10, _dispellable: false}));
                             break;
                         case  GearSet.DarkLegion:
-                            hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.Crit, value: 5, _dispellable: false}));
+                            hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.CritDmg, value: 5, _dispellable: false, destination: EffectDestination.Allies}));
                             break;
                         case  GearSet.Lava:
                             hero.effects.push(new Effect(EffectType.StatusChange).with({status: Status.CritDmg, value: 20, _dispellable: false}));

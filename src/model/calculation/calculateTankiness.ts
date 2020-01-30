@@ -27,6 +27,8 @@ export function calculateTankiness(battle: BattleCalculation) {
             tankiness /= (1 - 0.5 * block / 100 - block / 100 * blockdef / 100);
             tankiness /= (1 - tough / 100);
             tankiness /= (1- 0.9817 * defence / (19360.3675 + defence));
+            
+            tankiness /= battle.enemy.finalStats[Status.FlatAtk]!;
             hero.tankiness = Math.round(tankiness);
         }
     });

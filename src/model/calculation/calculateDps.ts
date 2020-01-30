@@ -23,6 +23,10 @@ export function calculateDps(battle: BattleCalculation) {
             let defPenetrated = def * (1 - pen / 100);
             let mitigation = 0.9817 * defPenetrated / (19360.3675 + defPenetrated);
             dps *= (1 - mitigation);
+
+            let weakness: number = hero.heroInfo.damageType === DamageType.Magic ? battle.enemy.finalStats[Status.MWeakness]! : battle.enemy.finalStats[Status.PWeakness]!;
+            dps *= (1 + weakness / 100) / 10;
+
             hero.dps = Math.round(dps);
         }
     });

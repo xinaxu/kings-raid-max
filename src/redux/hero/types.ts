@@ -27,7 +27,18 @@ export const CHANGE_HERO_UW_RUNES = "CHANGE_HERO_UW_RUNES";
 export const CHANGE_HERO_ARMOR_RUNES = "CHANGE_HERO_ARMOR_RUNES";
 export const CHANGE_HERO_ENCHANTS = "CHANGE_HERO_ENCHANTS";
 export const CHANGE_HERO_GEARSET = "CHANGE_HERO_GEARSET";
-export const CHANGE_HERO_ARTIFACT = "CHANGE_HERO_ARTIFACT";
+export const CHANGE_HERO_ARTIFACT_NAME = "CHANGE_HERO_ARTIFACT_NAME";
+export const CHANGE_HERO_ARTIFACT_LEVEL = "CHANGE_HERO_ARTIFACT_LEVEL";
+export const CHANGE_HERO_T5 = "CHANGE_HERO_T5";
+
+export type HeroT5Action = {
+    type: typeof CHANGE_HERO_T5;
+    payload: {
+        name: HeroName;
+        id: 0|1
+        value: boolean;
+    };
+}
 
 export type HeroOwnershipAction = {
     type: typeof CHANGE_HERO_OWNERSHIP;
@@ -152,11 +163,19 @@ export type HeroGearSetsAction = {
     };
 };
 
-export type HeroArtifactAction = {
-    type: typeof CHANGE_HERO_ARTIFACT;
+export type HeroArtifactNameAction = {
+    type: typeof CHANGE_HERO_ARTIFACT_NAME;
     payload: {
         name: HeroName
         value: ArtifactName | null
+    }
+}
+
+export type HeroArtifactLevelAction = {
+    type: typeof CHANGE_HERO_ARTIFACT_LEVEL;
+    payload: {
+        name: HeroName
+        value: 0 | 1|2|3|4|5 
     }
 }
 
@@ -175,7 +194,9 @@ export type AllHeroActions =
     | HeroArmorRunesAction
     | HeroEnchantsAction
     | HeroGearSetsAction
-    | HeroArtifactAction;
+    | HeroArtifactNameAction
+    |HeroArtifactLevelAction
+    | HeroT5Action;
 
 
 export enum BattleType {
@@ -197,21 +218,21 @@ export const BattleInfos: Record<BattleType, BattleInfo> = {
     [BattleType.WorldBoss1]: {
         numOfHeroes: 8,
         defence: 100000,
-        attack: 1000,
+        attack: 100000,
         attackType: DamageType.Physical,
         duration: 330
     },
     [BattleType.WorldBoss2]: {
         numOfHeroes: 8,
-        defence: 10000,
-        attack: 1000,
+        defence: 100000,
+        attack: 100000,
         attackType: DamageType.Magic,
         duration: 330
     },
     [BattleType.WorldBoss3]: {
         numOfHeroes: 8,
-        defence: 10000,
-        attack: 1000,
+        defence: 100000,
+        attack: 100000,
         attackType: DamageType.Magic,
         duration: 210
     }
