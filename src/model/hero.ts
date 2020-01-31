@@ -1,13 +1,8 @@
-import { HeroClassType } from "./hero-class-type";
-import {
-  Effect,
-  EffectDestination,
-  EffectType,
-  EffectMultiplierType
-} from "./effect";
-import { StarEffectGroup, StarLevel, createStarEffect } from "./star-effect";
-import { Status } from "./status";
-import { ArtifactName } from "./artifact";
+import {HeroClassType} from "./hero-class-type";
+import {Effect, EffectDestination, EffectMultiplierType, EffectType} from "./effect";
+import {createStarEffect, StarEffectGroup, StarLevel} from "./star-effect";
+import {Status} from "./status";
+import {ArtifactName} from "./artifact";
 
 export enum HeroName {
   // Knight
@@ -207,10 +202,14 @@ HeroInfos.Annette = {
         }),
         new Effect(EffectType.StatusChange).with({
           status: Status.FlatAtk,
-          value: 20000
+          value: 34614*1.25
         })
       ],
-      light: [],
+      light: [
+        new Effect(EffectType.StatusChange).with({
+          status: Status.FlatAtk,
+          value: 34614*0.5
+        })],
       dark: []
     }
   ],
@@ -227,12 +226,12 @@ HeroInfos.Annette = {
     new Effect(EffectType.StatusChange).with({
       destination: EffectDestination.Allies,
       status: Status.AtkSpd,
-      value: 25
+      value: 20
     }),
     new Effect(EffectType.StatusChange).with({
       destination: EffectDestination.Allies,
       status: Status.FlatAtk,
-      value: 0.04,
+      value: 0.05,
       fromStatus: Status.FlatAtk
     })
   ],
@@ -299,12 +298,12 @@ HeroInfos.Aselica = {
           coolDown: 20,
           destination: EffectDestination.TopDps,
           status: Status.FlatAtk,
-          value: 20000 * 1.5
+          value: 34564 * 1.5
         }),
         new Effect(EffectType.CooldownReduction).with({
           coolDown: 20,
           destination: EffectDestination.TopDps,
-          value: 20
+          value: 0.2
         })
       ],
       light: [],
@@ -321,24 +320,24 @@ HeroInfos.Aselica = {
           duration: 10,
           coolDown: 20,
           status: Status.FlatPDef,
-          value: 50000,
+          value: 46573,
           destination: EffectDestination.Allies
         }),
         new Effect(EffectType.StatusChange).with({
           duration: 10,
           coolDown: 20,
           status: Status.FlatMDef,
-          value: -50000,
+          value: -25706,
           destination: EffectDestination.Enemies
         })
       ],
       light: [],
       dark: [
         new Effect(EffectType.StatusChange).with({
-          duration: 5,
+          duration: 15,
           coolDown: 20,
           status: Status.FlatMDef,
-          value: -50000,
+          value: -25706,
           destination: EffectDestination.Enemies
         })
       ]
@@ -416,17 +415,17 @@ HeroInfos.Aselica = {
           duration: 10,
           coolDown: 20,
           status: Status.FlatPDef,
-          value: 50000,
+          value: 46573 * 0.5,
           destination: EffectDestination.Allies
         }),
         {}
       ),
       createStarEffect(
         new Effect(EffectType.StatusChange).with({
-          duration: 10,
+          duration: 15,
           coolDown: 20,
-          status: Status.FlatPDef,
-          value: -50000,
+          status: Status.FlatMDef,
+          value: -25706 * 0.5,
           destination: EffectDestination.Enemies
         }),
         {}
@@ -653,14 +652,14 @@ HeroInfos.Neraxis = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 20000,
+          value: 13488*1.5,
           duration: 15,
           coolDown: 15
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatDef,
-          value: 20000,
+          value: 13488*1.5,
           duration: 15,
           coolDown: 15
         }),
@@ -676,14 +675,14 @@ HeroInfos.Neraxis = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 20000,
+          value: 13488,
           duration: 15,
           coolDown: 15
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatDef,
-          value: 20000,
+          value: 13488,
           duration: 15,
           coolDown: 15
         })
@@ -715,18 +714,20 @@ HeroInfos.Neraxis = {
       ],
       light: [],
       dark: [
-        new Effect(EffectType.Cc).with({
+        new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
-          duration: 6,
-          coolDown: 10
-        })
+          status: Status.MDef,
+          value: -10,
+          duration: 15,
+          coolDown: 20
+        }),
       ]
     },
     {
       neither: [
         new Effect(EffectType.StatusChange).with({
           status: Status.FlatDef,
-          value: 10000
+          value: 18962
         }),
         new Effect(EffectType.StatusChange).with({
           status: Status.Tough,
@@ -742,11 +743,11 @@ HeroInfos.Neraxis = {
       dark: [
         new Effect(EffectType.StatusChange).with({
           status: Status.FlatDef,
-          value: 10000
+          value: 18962*0.5
         }),
         new Effect(EffectType.StatusChange).with({
           status: Status.Tough,
-          value: 15
+          value: 15*0.5
         })
       ]
     }
@@ -1393,7 +1394,7 @@ HeroInfos.Shea = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 24698 * 2,
+          value: 63228 * 2,
           duration: 8,
           coolDown: 8
         }),
@@ -1406,7 +1407,7 @@ HeroInfos.Shea = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 24698 * 0.4,
+          value: 63228 * 0.4,
           duration: 8,
           coolDown: 8
         })
@@ -1539,14 +1540,14 @@ HeroInfos.Veronica = {
       neither: [
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 25,
+          coolDown: 21,
           duration: 10,
           status: Status.FlatAtk,
-          value: 44848 * 1.5
+          value: 50584 * 1.5
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 25,
+          coolDown: 21,
           duration: 10,
           status: Status.Dps,
           value: 15
@@ -1556,14 +1557,14 @@ HeroInfos.Veronica = {
       light: [
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 25,
+          coolDown: 21,
           duration: 10,
           status: Status.FlatAtk,
-          value: 44848 * 1.9
+          value: 50584 * 1.9
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 25,
+          coolDown: 21,
           duration: 10,
           status: Status.Dps,
           value: 15
@@ -1572,14 +1573,14 @@ HeroInfos.Veronica = {
       dark: [
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 20,
+          coolDown: 16,
           duration: 10,
           status: Status.FlatAtk,
-          value: 44848 * 1.5
+          value: 50584 * 1.5
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 20,
+          coolDown: 16,
           duration: 10,
           status: Status.Dps,
           value: 15
@@ -1591,11 +1592,11 @@ HeroInfos.Veronica = {
         new Effect(EffectType.Cc).with({
           destination: EffectDestination.Enemies,
           duration: 10,
-          coolDown: 25
+          coolDown: 21
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
-          coolDown: 25,
+          coolDown: 21,
           duration: 10,
           status: Status.MWeakness,
           value: 30
@@ -1605,7 +1606,7 @@ HeroInfos.Veronica = {
       dark: [
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
-          coolDown: 25,
+          coolDown: 21,
           duration: 10,
           status: Status.MWeakness,
           value: 30
@@ -1617,7 +1618,7 @@ HeroInfos.Veronica = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 4480
+          value: 5056
         }),
         new Effect(EffectType.Cc).with({
           destination: EffectDestination.Enemies,
@@ -1626,14 +1627,14 @@ HeroInfos.Veronica = {
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 20,
+          coolDown: 16,
           duration: 10,
           status: Status.FlatAtk,
-          value: 44848 * 0.5
+          value: 50584 * 0.5
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          coolDown: 20,
+          coolDown: 16,
           duration: 10,
           status: Status.Dps,
           value: 15 * 0.5
@@ -1641,21 +1642,17 @@ HeroInfos.Veronica = {
         new Effect(EffectType.Cc).with({
           destination: EffectDestination.Enemies,
           duration: 10 * 0.5,
-          coolDown: 25
+          coolDown: 21
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
-          coolDown: 25,
+          coolDown: 21,
           duration: 10,
           status: Status.Weakness,
           value: 30 * 0.5
         })
       ],
       light: [
-        new Effect(EffectType.StatusChange).with({
-          status: Status.CritDmg,
-          value: 30 * 5
-        })
       ],
       dark: []
     }
@@ -1666,7 +1663,7 @@ HeroInfos.Veronica = {
     new Effect(EffectType.StatusChange).with({ status: Status.Hp, value: 15 }),
     new Effect(EffectType.StatusChange).with({ status: Status.Crit, value: 15 })
   ],
-  t5Dark: [new Effect(EffectType.CooldownReduction).with({ value: 4.75 })],
+  t5Dark: [],
   uw: new StarEffectGroup(
     createStarEffect(
       new Effect(EffectType.Cc).with({
@@ -1679,26 +1676,26 @@ HeroInfos.Veronica = {
     createStarEffect(
       new Effect(EffectType.StatusChange).with({
         destination: EffectDestination.Allies,
-        coolDown: 20,
+        coolDown: 16,
         duration: 10,
         status: Status.FlatAtk,
-        value: 44848 * 0.4
+        value: 50584 * 0.4
       }),
       {
         values: [
-          44848 * 0.4,
-          44848 * 0.5,
-          44848 * 0.6,
-          44848 * 0.7,
-          44848 * 0.8,
-          44848 * 0.9
+          50584 * 0.4,
+          50584 * 0.5,
+          50584 * 0.6,
+          50584 * 0.7,
+          50584 * 0.8,
+          50584 * 0.9
         ]
       }
     ),
     createStarEffect(
       new Effect(EffectType.StatusChange).with({
         destination: EffectDestination.Allies,
-        coolDown: 20,
+        coolDown: 16,
         duration: 10,
         status: Status.Dps,
         value: 15 * 0.4
@@ -1708,7 +1705,7 @@ HeroInfos.Veronica = {
     createStarEffect(
       new Effect(EffectType.StatusChange).with({
         destination: EffectDestination.Enemies,
-        coolDown: 25,
+        coolDown: 21,
         duration: 10,
         status: Status.Weakness,
         value: 30 * 0.4
@@ -1719,7 +1716,7 @@ HeroInfos.Veronica = {
       new Effect(EffectType.Cc).with({
         destination: EffectDestination.Enemies,
         duration: 10 * 0.4,
-        coolDown: 25
+        coolDown: 21
       }),
       {
         durations: [10 * 0.4, 10 * 0.5, 10 * 0.6, 10 * 0.7, 10 * 0.8, 10 * 0.9]
@@ -1729,12 +1726,20 @@ HeroInfos.Veronica = {
   ut: [
     new StarEffectGroup(),
     new StarEffectGroup(
-      createStarEffect(
-        new Effect(EffectType.SingleSkillCooldownReduction).with({
-          value: 1.6
-        }),
-        { values: [1.6, 1.9, 2.3, 2.7, 3.3, 4] }
-      )
+        createStarEffect(
+            new Effect(EffectType.StatusChange).with({
+              destination: EffectDestination.Allies,
+              status: Status.FlatAtk, coolDown: 16, value: 50584*(1.4 + 1.5)
+            }),
+            { durations: [1.6, 1.9, 2.3, 2.7, 3.3, 4] }
+        ),
+        createStarEffect(
+            new Effect(EffectType.StatusChange).with({
+              destination: EffectDestination.Allies,
+              status: Status.Dps, coolDown: 16, value: 15*(1 + 1.5)
+            }),
+            { durations: [1.6, 1.9, 2.3, 2.7, 3.3, 4] }
+        )
     ),
     new StarEffectGroup(
       createStarEffect(
@@ -1745,14 +1750,22 @@ HeroInfos.Veronica = {
       )
     ),
     new StarEffectGroup(
-      createStarEffect(
+        createStarEffect(
+            new Effect(EffectType.StatusChange).with({
+              destination: EffectDestination.Allies,
+              status: Status.FlatAtk,
+              value: 5056 * 0.5
+            }),
+            {}
+        ),
+    createStarEffect(
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
-          status: Status.FlatAtk,
-          value: 4480 * 0.5
+          status: Status.CritDmg,
+          value: 20, coolDown: 20, duration: 10
         }),
-        {}
-      )
+        {values: [20,24,29,35,42,50]}
+    )
     )
   ],
   sw: [[], [], []]
@@ -1866,10 +1879,34 @@ HeroInfos.Glenwys = {
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
           value: 7371 * 1.5
-        })
+        }),
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.Allies,
+          status: Status.Dps,
+          value: 10,
+          ending: 20
+        }),
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.Allies,
+          status: Status.Tough,
+          value: 10,
+          ending: 20
+        }),
       ],
-      light: [],
-      dark: []
+      light: [
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.Allies,
+          status: Status.Dps,
+          value: 10,
+          ending: 20
+        }),],
+      dark: [
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.Allies,
+          status: Status.Tough,
+          value: 10,
+          ending: 20
+        }),]
     }
   ],
   t5Light: [
@@ -1991,7 +2028,7 @@ HeroInfos.Glenwys = {
           destination: EffectDestination.TopDps,
           status: Status.Dps,
           value: 30,
-          ending: 10
+          ending: 20
         }),
         {
           values: [10, 12, 14, 17, 21, 25]
@@ -2011,7 +2048,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 2832 / 3,
+          value: 4630 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: { type: EffectMultiplierType.ByCooldown, maxStack: 5 * 3 }
@@ -2019,7 +2056,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.Pen,
-          value: 70 / 3,
+          value: 7 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: { type: EffectMultiplierType.ByCooldown, maxStack: 5 * 3 }
@@ -2027,7 +2064,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.AtkSpd,
-          value: 70 / 3,
+          value: 10 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: { type: EffectMultiplierType.ByCooldown, maxStack: 5 * 3 }
@@ -2038,7 +2075,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 2832 / 3,
+          value: 4630 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: { type: EffectMultiplierType.ByCooldown, maxStack: 8 * 3 }
@@ -2046,7 +2083,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.Pen,
-          value: 70 / 3,
+          value: 7 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: { type: EffectMultiplierType.ByCooldown, maxStack: 8 * 3 }
@@ -2054,7 +2091,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.AtkSpd,
-          value: 70 / 3,
+          value: 10 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: { type: EffectMultiplierType.ByCooldown, maxStack: 8 * 3 }
@@ -2064,7 +2101,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.FlatAtk,
-          value: 2832 / 3,
+          value: 4630 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: {
@@ -2076,7 +2113,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.Pen,
-          value: 70 / 3,
+          value: 7 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: {
@@ -2088,7 +2125,7 @@ HeroInfos.May = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Allies,
           status: Status.AtkSpd,
-          value: 70 / 3,
+          value: 10 / 3,
           duration: 120,
           coolDown: 8,
           multiplier: {
@@ -2159,23 +2196,23 @@ HeroInfos.May = {
       new Effect(EffectType.StatusChange).with({
         destination: EffectDestination.Allies,
         status: Status.Pen,
-        value: 20 / 3,
+        value: 2 / 3,
         coolDown: 8,
         duration: 120,
         multiplier: { maxStack: 8 * 3, type: EffectMultiplierType.ByCooldown }
       }),
-      { values: [20 / 3, 24 / 3, 29 / 3, 35 / 3, 42 / 3, 50 / 3] }
+      { values: [2 / 3, 2.4 / 3, 2.9 / 3, 3.5 / 3, 4.2 / 3, 5.0 / 3] }
     ),
     createStarEffect(
       new Effect(EffectType.StatusChange).with({
         destination: EffectDestination.Allies,
         status: Status.AtkSpd,
-        value: 20 / 3,
+        value: 2 / 3,
         coolDown: 8,
         duration: 120,
         multiplier: { maxStack: 8 * 3, type: EffectMultiplierType.ByCooldown }
       }),
-      { values: [20 / 3, 24 / 3, 29 / 3, 35 / 3, 42 / 3, 50 / 3] }
+      { values: [2/ 3, 2.4 / 3, 2.9 / 3, 3.5 / 3, 4.2 / 3, 5.0 / 3] }
     )
   ),
   ut: [
@@ -2240,7 +2277,7 @@ HeroInfos.Lavril = {
           status: Status.CritDmg,
           value: 50,
           coolDown: 24,
-          duration: 24
+          duration: 15
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.TopDps,
@@ -2248,7 +2285,7 @@ HeroInfos.Lavril = {
           value: 0.15,
           fromStatus: Status.CritDmg,
           coolDown: 24,
-          duration: 24
+          duration: 15
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.SingleEnemy,
@@ -2265,27 +2302,20 @@ HeroInfos.Lavril = {
           duration: 15
         })
       ],
-      light: [],
-      dark: []
+      light: [
+          new Effect(EffectType.Dispel).with({destination: EffectDestination.SingleEnemy, coolDown: 24})
+      ],
+      dark: [
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.TopDps,
+          status: Status.Atk,
+          value: 25,
+          coolDown: 24,
+          duration: 15})
+      ]
     },
     {
       neither: [
-        new Effect(EffectType.StatusChange).with({
-          destination: EffectDestination.Enemies,
-          status: Status.MWeakness,
-          value: 30,
-          coolDown: 25,
-          duration: 5
-        }),
-        new Effect(EffectType.StatusChange).with({
-          destination: EffectDestination.Enemies,
-          status: Status.MWeakness,
-          value: 30,
-          coolDown: 25,
-          duration: 5
-        })
-      ],
-      light: [
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
           status: Status.MWeakness,
@@ -2295,9 +2325,25 @@ HeroInfos.Lavril = {
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
+          status: Status.Atk,
+          value: -22.5,
+          coolDown: 25,
+          duration: 10
+        })
+      ],
+      light: [
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.Enemies,
           status: Status.MWeakness,
           value: 22.5,
-          coolDown: 25,
+          coolDown: 17.5,
+          duration: 10
+        }),
+        new Effect(EffectType.StatusChange).with({
+          destination: EffectDestination.Enemies,
+          status: Status.Atk,
+          value: -22.5,
+          coolDown: 17.5,
           duration: 10
         })
       ],
@@ -2306,14 +2352,14 @@ HeroInfos.Lavril = {
           destination: EffectDestination.Enemies,
           status: Status.MWeakness,
           value: 22.5,
-          coolDown: 17.5,
+          coolDown: 25,
           duration: 10
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
-          status: Status.MWeakness,
-          value: 22.5,
-          coolDown: 17.5,
+          status: Status.Atk,
+          value: -22.5,
+          coolDown: 25,
           duration: 10
         })
       ],
@@ -2324,7 +2370,7 @@ HeroInfos.Lavril = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.TopDps,
           status: Status.FlatAtk,
-          value: 1000
+          value: 28447*1.5
         }),
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.TopDps,
@@ -2425,16 +2471,6 @@ HeroInfos.Lavril = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.Enemies,
           status: Status.MWeakness,
-          value: 22.5,
-          coolDown: 17.5,
-          duration: 2
-        }),
-        {}
-      ),
-      createStarEffect(
-        new Effect(EffectType.StatusChange).with({
-          destination: EffectDestination.Enemies,
-          status: Status.MWeakness,
           value: 8,
           coolDown: 17.5,
           duration: 12
@@ -2447,7 +2483,7 @@ HeroInfos.Lavril = {
         new Effect(EffectType.StatusChange).with({
           destination: EffectDestination.TopDps,
           status: Status.FlatAtk,
-          value: 1000
+          value: 28447 * 0.5
         }),
         {}
       ),
